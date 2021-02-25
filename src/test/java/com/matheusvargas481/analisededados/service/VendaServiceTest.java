@@ -48,6 +48,11 @@ public class VendaServiceTest {
         assertEquals(vendedorEsperado, vendedor);
     }
 
+    @Test
+    public void testComInformacoesErradasNoItensDeVenda(){
+
+    }
+
 
     private List<String> getLinhasDoArquivo() {
         return Arrays.asList(

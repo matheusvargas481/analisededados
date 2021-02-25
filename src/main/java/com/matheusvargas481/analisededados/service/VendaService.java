@@ -38,7 +38,7 @@ public class VendaService {
     }
 
     public String buscarPiorVendedor() {
-        return vendas.stream().min(Comparator.comparing(Venda::valorTotalDaVenda)).map(Vendedor::new).get().getNome();
+        return vendas.stream().min(Comparator.comparing(Venda::valorTotalDaVenda)).map(Venda::getNome).get();
     }
 
     private void montarVenda(List<String> linhasComVendas) {

@@ -6,17 +6,25 @@ import com.matheusvargas481.analisededados.service.arquivo.LeArquivoService;
 import com.matheusvargas481.analisededados.service.ClienteService;
 import com.matheusvargas481.analisededados.service.VendaService;
 import com.matheusvargas481.analisededados.service.VendedorService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.List;
 
+@Service
 public class EscutaDiretorio {
     private DiretorioService diretorioService = new DiretorioService();
     private LeArquivoService leArquivoService = new LeArquivoService();
-    private VendedorService vendedorService = new VendedorService();
-    private VendaService vendaService = new VendaService();
-    private ClienteService clienteService = new ClienteService();
+
+    @Autowired
+    private VendedorService vendedorService;
+    @Autowired
+    private VendaService vendaService;
+    @Autowired
+    private ClienteService clienteService;
+
     private WatchService watchService = null;
     private WatchKey key;
 

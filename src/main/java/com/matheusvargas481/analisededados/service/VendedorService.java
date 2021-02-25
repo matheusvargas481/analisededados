@@ -3,52 +3,48 @@ package com.matheusvargas481.analisededados.service;
 import com.matheusvargas481.analisededados.domain.Vendedor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class VendedorService {
-    private List<String> linhasComVendedores;
-    private List<Vendedor> vendedores;
+    private int contadorDeVendedor;
 
-    public List<Vendedor> getVendedores() {
-        return vendedores;
+    public List<Vendedor> identificarVendedores(List<String> linhasDoArquivo) {
+        return linhasDoArquivo.stream()
+                .filter(this::isLinhaValidaVendedor)
+                .map(this::montarVendedor)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
-    public List<String> getLinhasComVendedores() {
-        return linhasComVendedores;
-    }
-
-    public void identificarVendedores(List<String> vendedoresDoArquivo) {
-        linhasComVendedores = new ArrayList<>();
-        for (String vendedor : vendedoresDoArquivo) {
-            if (vendedor.startsWith(Vendedor.COMECA_COM_001)) {
-                linhasComVendedores.add(vendedor);
-            }
-        }
-        montarVendedor(linhasComVendedores);
+    private boolean isLinhaValidaVendedor(String vendedor) {
+        return vendedor.startsWith(Vendedor.COMECA_COM_001);
     }
 
     public int buscarQuantidadeDeVendedores() {
-        return vendedores.size();
+        return contadorDeVendedor;
     }
 
-    private void montarVendedor(List<String> linhasComVendedores) {
-        vendedores = new ArrayList<>();
-        for (String linhasDeVendedores : linhasComVendedores) {
-            String separador = linhasDeVendedores.substring(3, 4);
-            String[] linhasDeVendasSemSeparador = linhasDeVendedores.split(separador);
-            try {
-                Vendedor vendedor = new Vendedor();
-                vendedor.setCpf(linhasDeVendasSemSeparador[1]);
-                vendedor.setNome(linhasDeVendasSemSeparador[2]);
-                vendedor.setSalario(Double.parseDouble(linhasDeVendasSemSeparador[3]));
-                vendedores.add(vendedor);
-            } catch (RuntimeException e) {
-                //TODO tratar vendedores que contém erros
-                throw new RuntimeException("Não foi possível montar o vendedor.", e.getCause());
-            }
+    private Vendedor montarVendedor(String linhaDeVendedor) {
+        String separador = linhaDeVendedor.substring(3, 4);
+        String[] linhasDeVendedorSemSeparador = linhaDeVendedor.split(separador);
+
+        try {
+            Vendedor vendedor = new Vendedor();
+            vendedor.setCpf(linhasDeVendedorSemSeparador[1]);
+            vendedor.setNome(linhasDeVendedorSemSeparador[2]);
+            vendedor.setSalario(Double.parseDouble(linhasDeVendedorSemSeparador[3]));
+            contadorDeVendedor++;
+
+            return vendedor;
+
+            //TODO criar exception customizada
+        } catch (RuntimeException e) {
+            //TODO tratar vendedores que contém erros
+            System.out.println("Não foi possível montar o vendedor: " + linhaDeVendedor + " pelo motivo: " + e.getCause());
+            return null;
         }
     }
-
 }

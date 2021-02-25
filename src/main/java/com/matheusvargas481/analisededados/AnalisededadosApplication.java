@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class AnalisededadosApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(AnalisededadosApplication.class, args);
+
 		EscutaDiretorio escutaDiretorio = new EscutaDiretorio();
 		escutaDiretorio.escutarCaminho();
 	}

@@ -15,6 +15,8 @@ public class VendedorServiceTest {
     @Autowired
     private VendedorService vendedorService;
 
+
+
     @Test
     public void testIdentificarVendedor() {
         vendedorService.identificarVendedores(getLinhasDoArquivo());
@@ -31,6 +33,26 @@ public class VendedorServiceTest {
     public void testQuantidadeDeVendedoresNoArquivo() {
         vendedorService.identificarVendedores(getLinhasDoArquivo());
         Assertions.assertEquals(2, vendedorService.buscarQuantidadeDeVendedores());
+    }
+
+    @Test
+    public void testArquivoVazio(){
+    }
+
+    @Test
+    public void testArquivoValidoESemLinhasDeVendedor(){
+    }
+
+    @Test
+    public void testColunasIncompletas(){
+    }
+
+    @Test
+    public void testComSeparadorDiferente(){
+    }
+
+    @Test
+    public void testNomeComCedilha(){
     }
 
     private List<String> getLinhasDoArquivo() {

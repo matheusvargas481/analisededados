@@ -32,6 +32,28 @@ public class ClienteServiceTest {
         Assertions.assertEquals(2, clienteService.buscarQuantidadeDeClientes());
     }
 
+    @Test
+    public void testArquivoVazio(){
+    }
+
+    @Test
+    public void testArquivoValidoESemLinhasDeCliente(){
+    }
+
+    @Test
+    public void testColunasIncompletas(){
+    }
+
+    @Test
+    public void testComSeparadorDiferente(){
+    }
+
+    @Test
+    public void testNomeComCedilha(){
+    }
+
+
+
     private List<String> getLinhasDoArquivo() {
         return Arrays.asList(
                 "001ç1234567891234çDiegoç50000",
