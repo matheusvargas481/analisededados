@@ -20,36 +20,33 @@ public class VendaServiceTest {
     @Autowired
     private VendaService vendaService;
 
-//    @Test
-//    public void testIdentificarVenda() {
-//        List<String> linhasComVendas = vendaService.identificarVendas(getLinhasDoArquivo());
-//        assertEquals(getLinhasDeVenda(), linhasComVendas);
-//    }
-//
-//    @Test
-//    public void testMontarVenda() {
-//        vendaService.identificarVendas(getLinhasDoArquivo());
-//        vendaService.montarVenda();
-//        assertEquals(getVendas(), vendaService.getVendas());
-//    }
-//
-//    @Test
-//    public void testBuscarIdDaVendaDeMaiorValor(){
-//        vendaService.identificarVendas(getLinhasDoArquivo());
-//        vendaService.montarVenda();
-//        Long idDaVendaDeMaiorValor = vendaService.buscarIdDaVendaDeMaiorValor();
-//        Long idEsperado = getVendas().get(0).getId();
-//        assertEquals(idEsperado, idDaVendaDeMaiorValor);
-//    }
-//
-//    @Test
-//    public void testBuscarPiorVendedor(){
-//        vendaService.identificarVendas(getLinhasDoArquivo());
-//        vendaService.montarVenda();
-//        Vendedor vendedor = vendaService.buscarPiorVendedor();
-//        String vendedorEsperado = getVendas().get(1).getNome();
-//        assertEquals(vendedorEsperado, vendedor.getNome());
-//    }
+    @Test
+    public void testIdentificarVenda() {
+        vendaService.identificarVendas(getLinhasDoArquivo());
+        assertEquals(getLinhasDeVenda(), vendaService.getLinhasComVendas());
+    }
+
+    @Test
+    public void testMontarVenda() {
+        vendaService.identificarVendas(getLinhasDoArquivo());
+        assertEquals(getVendas(), vendaService.getVendas());
+    }
+
+    @Test
+    public void testBuscarIdDaVendaDeMaiorValor(){
+        vendaService.identificarVendas(getLinhasDoArquivo());
+        Long idDaVendaDeMaiorValor = vendaService.buscarIdDaVendaDeMaiorValor();
+        Long idEsperado = getVendas().get(0).getId();
+        assertEquals(idEsperado, idDaVendaDeMaiorValor);
+    }
+
+    @Test
+    public void testBuscarPiorVendedor(){
+        vendaService.identificarVendas(getLinhasDoArquivo());
+        String vendedor = vendaService.buscarPiorVendedor();
+        String vendedorEsperado = getVendas().get(1).getNome();
+        assertEquals(vendedorEsperado, vendedor);
+    }
 
 
     private List<String> getLinhasDoArquivo() {

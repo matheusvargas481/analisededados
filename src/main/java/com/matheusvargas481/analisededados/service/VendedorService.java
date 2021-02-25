@@ -15,6 +15,10 @@ public class VendedorService {
         return vendedores;
     }
 
+    public List<String> getLinhasComVendedores() {
+        return linhasComVendedores;
+    }
+
     public void identificarVendedores(List<String> vendedoresDoArquivo) {
         linhasComVendedores = new ArrayList<>();
         for (String vendedor : vendedoresDoArquivo) {

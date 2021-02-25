@@ -19,6 +19,10 @@ public class VendaService {
         return vendas;
     }
 
+    public List<String> getLinhasComVendas() {
+        return linhasComVendas;
+    }
+
     public void identificarVendas(List<String> vendasDoArquivo) {
         linhasComVendas = new ArrayList<>();
         for (String venda : vendasDoArquivo) {

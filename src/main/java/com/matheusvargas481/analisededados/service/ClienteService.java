@@ -15,6 +15,8 @@ public class ClienteService {
         return clientes;
     }
 
+    public List<String> getLinhasComClientes() { return linhasComClientes; }
+
     public void identificarClientes(List<String> clientesDoArquivo) {
         linhasComClientes = new ArrayList<>();
         for (String cliente : clientesDoArquivo) {

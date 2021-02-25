@@ -14,25 +14,23 @@ public class ClienteServiceTest {
     @Autowired
     private ClienteService clienteService;
 
-//    @Test
-//    public void testIdentificarCliente() {
-//        clienteService.identificarClientes(getLinhasDoArquivo());
-//        Assertions.assertEquals(getLinhasDeCliente(), linhasComClientes);
-//    }
-//
-//    @Test
-//    public void testMontarCliente() {
-//        clienteService.identificarClientes(getLinhasDoArquivo());
-//        clienteService.montarCliente();
-//        Assertions.assertEquals(getClientes(), clienteService.getClientes());
-//    }
-//
-//    @Test
-//    public void testQuantidadeDeClientesNoArquivo() {
-//        clienteService.identificarClientes(getLinhasDoArquivo());
-//        clienteService.montarCliente();
-//        Assertions.assertEquals(2, clienteService.buscarQuantidadeDeClientes());
-//    }
+    @Test
+    public void testIdentificarCliente() {
+        clienteService.identificarClientes(getLinhasDoArquivo());
+        Assertions.assertEquals(getLinhasDeCliente(), clienteService.getLinhasComClientes());
+    }
+
+    @Test
+    public void testMontarCliente() {
+        clienteService.identificarClientes(getLinhasDoArquivo());
+        Assertions.assertEquals(getClientes(), clienteService.getClientes());
+    }
+
+    @Test
+    public void testQuantidadeDeClientesNoArquivo() {
+        clienteService.identificarClientes(getLinhasDoArquivo());
+        Assertions.assertEquals(2, clienteService.buscarQuantidadeDeClientes());
+    }
 
     private List<String> getLinhasDoArquivo() {
         return Arrays.asList(

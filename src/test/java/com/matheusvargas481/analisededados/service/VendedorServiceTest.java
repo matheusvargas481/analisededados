@@ -15,25 +15,23 @@ public class VendedorServiceTest {
     @Autowired
     private VendedorService vendedorService;
 
-//    @Test
-//    public void testIdentificarVendedor() {
-//        List<String> linhasComClientes = vendedorService.identificarVendedores(getLinhasDoArquivo());
-//        Assertions.assertEquals(getLinhasDeCliente(), linhasComClientes);
-//    }
-//
-//    @Test
-//    public void testMontarVendedor() {
-//        List<String> linhasComVendedores = vendedorService.identificarVendedores(getLinhasDoArquivo());
-//        vendedorService.montarVendedor();
-//        Assertions.assertEquals(getVendedores(), vendedorService.getVendedores());
-//    }
-//
-//    @Test
-//    public void testQuantidadeDeVendedoresNoArquivo() {
-//        List<String> linhasComVendedores = vendedorService.identificarVendedores(getLinhasDoArquivo());
-//        vendedorService.montarVendedor();
-//        Assertions.assertEquals(2, vendedorService.buscarQuantidadeDeVendedores());
-//    }
+    @Test
+    public void testIdentificarVendedor() {
+        vendedorService.identificarVendedores(getLinhasDoArquivo());
+        Assertions.assertEquals(getLinhasDeCliente(), vendedorService.getLinhasComVendedores());
+    }
+
+    @Test
+    public void testMontarVendedor() {
+        vendedorService.identificarVendedores(getLinhasDoArquivo());
+        Assertions.assertEquals(getVendedores(), vendedorService.getVendedores());
+    }
+
+    @Test
+    public void testQuantidadeDeVendedoresNoArquivo() {
+        vendedorService.identificarVendedores(getLinhasDoArquivo());
+        Assertions.assertEquals(2, vendedorService.buscarQuantidadeDeVendedores());
+    }
 
     private List<String> getLinhasDoArquivo() {
         return Arrays.asList(
