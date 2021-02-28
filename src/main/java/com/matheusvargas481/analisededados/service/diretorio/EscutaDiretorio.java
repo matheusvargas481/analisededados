@@ -1,11 +1,11 @@
 package com.matheusvargas481.analisededados.service.diretorio;
 
 
-import com.matheusvargas481.analisededados.service.arquivo.EscreveArquivoService;
-import com.matheusvargas481.analisededados.service.arquivo.LeArquivoService;
 import com.matheusvargas481.analisededados.service.ClienteService;
 import com.matheusvargas481.analisededados.service.VendaService;
 import com.matheusvargas481.analisededados.service.VendedorService;
+import com.matheusvargas481.analisededados.service.arquivo.EscreveArquivoService;
+import com.matheusvargas481.analisededados.service.arquivo.LeArquivoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -72,7 +72,7 @@ public class EscutaDiretorio {
             }
 
             List<String> linhasDosArquivos = leArquivoService.lerArquivo();
-            clienteService.identificarClientes(linhasDosArquivos);
+            clienteService.filtrarClientes(linhasDosArquivos);
             vendaService.identificarVendas(linhasDosArquivos);
             vendedorService.identificarVendedores(linhasDosArquivos);
             escreveArquivoService.escreverNoArquivo();

@@ -1,6 +1,9 @@
 package com.matheusvargas481.analisededados.service;
 
 import com.matheusvargas481.analisededados.domain.Vendedor;
+import com.matheusvargas481.analisededados.exception.ErroAoMontarClienteException;
+import com.matheusvargas481.analisededados.exception.ErroAoMontarVendedorException;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,9 +12,11 @@ import java.util.stream.Collectors;
 
 @Service
 public class VendedorService {
+    private Logger log;
     private int contadorDeVendedor;
 
     public List<Vendedor> identificarVendedores(List<String> linhasDoArquivo) {
+        contadorDeVendedor = 0;
         return linhasDoArquivo.stream()
                 .filter(this::isLinhaValidaVendedor)
                 .map(this::montarVendedor)
@@ -32,6 +37,7 @@ public class VendedorService {
         String[] linhasDeVendedorSemSeparador = linhaDeVendedor.split(separador);
 
         try {
+            if (linhasDeVendedorSemSeparador.length != 4) throw new ErroAoMontarVendedorException();
             Vendedor vendedor = new Vendedor();
             vendedor.setCpf(linhasDeVendedorSemSeparador[1]);
             vendedor.setNome(linhasDeVendedorSemSeparador[2]);
@@ -40,10 +46,8 @@ public class VendedorService {
 
             return vendedor;
 
-            //TODO criar exception customizada
-        } catch (RuntimeException e) {
-            //TODO tratar vendedores que contém erros
-            System.out.println("Não foi possível montar o vendedor: " + linhaDeVendedor + " pelo motivo: " + e.getCause());
+        } catch (ErroAoMontarVendedorException e) {
+            log.error("Não foi possível montar o vendedor: {} pelo motivo: {}",linhaDeVendedor, e.getCause());
             return null;
         }
     }

@@ -1,6 +1,8 @@
 package com.matheusvargas481.analisededados.service;
 
 import com.matheusvargas481.analisededados.domain.Cliente;
+import com.matheusvargas481.analisededados.exception.ErroAoMontarClienteException;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,10 +11,11 @@ import java.util.stream.Collectors;
 
 @Service
 public class ClienteService {
+    private Logger log;
     private int contadorDeClientes;
 
-    public List<Cliente> identificarClientes(List<String> linhasDoArquivo) {
-
+    public List<Cliente> filtrarClientes(List<String> linhasDoArquivo) {
+        contadorDeClientes = 0;
         return linhasDoArquivo.stream()
                 .filter(this::isLinhaValidaCliente)
                 .map(this::montarCliente)
@@ -34,6 +37,7 @@ public class ClienteService {
         String[] linhasDeClienteSemSeparador = linhaDeCliente.split(separador);
 
         try {
+            if (linhasDeClienteSemSeparador.length != 4) throw new ErroAoMontarClienteException();
             Cliente cliente = new Cliente();
             cliente.setCnpj(linhasDeClienteSemSeparador[1]);
             cliente.setNome(linhasDeClienteSemSeparador[2]);
@@ -42,11 +46,8 @@ public class ClienteService {
 
             return cliente;
 
-            //TODO criar exception customizada
-        } catch (Exception e) {
-
-            //TODO trocar system out por log4j
-            System.out.println("Não foi possível montar o cliente: " + linhaDeCliente + " pelo motivo: " + e.getCause());
+        } catch (ErroAoMontarClienteException e) {
+            log.error("Não foi possível montar o cliente: {} pelo motivo: {}", linhaDeCliente, e.getCause());
             return null;
         }
     }

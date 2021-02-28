@@ -2,6 +2,7 @@ package com.matheusvargas481.analisededados.domain;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class Venda {
     public static final String COMECA_COM_003 = "003";

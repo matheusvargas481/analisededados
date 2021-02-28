@@ -21,10 +21,13 @@ public class LeArquivoService {
         linhasDoArquivo = new ArrayList<>();
         try {
             for (File file : dir.listFiles()) {
+
                 BufferedReader bufferedReader = Files.newBufferedReader(file.toPath());
+
                 while ((linha = bufferedReader.readLine()) != null) {
                     linhasDoArquivo.add(linha);
                 }
+
                 bufferedReader.close();
             }
         } catch (IOException e) {
@@ -33,6 +36,5 @@ public class LeArquivoService {
 
         return linhasDoArquivo;
     }
-
 
 }
