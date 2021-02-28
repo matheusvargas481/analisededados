@@ -1,7 +1,5 @@
 package com.matheusvargas481.analisededados.domain;
 
-import java.util.Objects;
-
 public class Vendedor {
     public static final String COMECA_COM_001 = "001";
     private String cpf;
@@ -15,10 +13,6 @@ public class Vendedor {
         this.cpf = cpf;
         this.nome = nome;
         this.salario = salario;
-    }
-
-    public Vendedor(Venda venda) {
-        this.nome = venda.getNome();
     }
 
     public String getCpf() {
@@ -62,10 +56,5 @@ public class Vendedor {
         return Double.compare(vendedor.salario, salario) == 0 &&
                 cpf.equals(vendedor.cpf) &&
                 nome.equals(vendedor.nome);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(cpf, nome, salario);
     }
 }

@@ -1,7 +1,5 @@
 package com.matheusvargas481.analisededados.domain;
 
-import java.util.Objects;
-
 public class ItemDeVenda {
     private Long id;
     private int quantidade;
@@ -57,10 +55,5 @@ public class ItemDeVenda {
         return quantidade == that.quantidade &&
                 id.equals(that.id) &&
                 preco.equals(that.preco);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, quantidade, preco);
     }
 }

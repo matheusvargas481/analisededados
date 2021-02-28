@@ -4,6 +4,7 @@ import com.matheusvargas481.analisededados.service.ClienteService;
 import com.matheusvargas481.analisededados.service.diretorio.DiretorioService;
 import com.matheusvargas481.analisededados.service.VendaService;
 import com.matheusvargas481.analisededados.service.VendedorService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedWriter;
@@ -14,8 +15,11 @@ import java.util.NoSuchElementException;
 
 @Service
 public class EscreveArquivoService {
+    @Autowired
     private ClienteService clienteService;
+    @Autowired
     private VendedorService vendedorService;
+    @Autowired
     private VendaService vendaService;
 
     public EscreveArquivoService(ClienteService clienteService, VendedorService vendedorService, VendaService vendaService) {

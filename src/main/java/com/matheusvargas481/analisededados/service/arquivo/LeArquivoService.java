@@ -12,13 +12,10 @@ import java.util.List;
 
 @Service
 public class LeArquivoService {
-    private List<String> linhasDoArquivo;
-
-
     public List<String> lerArquivo() {
         File dir = new File(DiretorioService.CAMINHO_ENTRADA);
         String linha;
-        linhasDoArquivo = new ArrayList<>();
+        List<String> linhasDoArquivo = new ArrayList<>();
         try {
             for (File file : dir.listFiles()) {
 
