@@ -6,6 +6,7 @@ import com.matheusvargas481.analisededados.domain.Vendedor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -46,12 +47,12 @@ public class DadoProcessado {
     }
 
     public int buscarQuantidadeDeClientes() {
-        if (clientes.isEmpty()) return 0;
+        if (clientes.isEmpty()) return Collections.EMPTY_LIST.size();
         return clientes.size();
     }
 
     public int buscarQuantidadeDeVendedores() {
-        if (vendedores.isEmpty()) return 0;
+        if (vendedores.isEmpty()) return Collections.EMPTY_LIST.size();
         return vendedores.size();
     }
 
