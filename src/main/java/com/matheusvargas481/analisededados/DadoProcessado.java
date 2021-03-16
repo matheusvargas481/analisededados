@@ -46,10 +46,12 @@ public class DadoProcessado {
     }
 
     public int buscarQuantidadeDeClientes() {
+        if (clientes.isEmpty()) return 0;
         return clientes.size();
     }
 
     public int buscarQuantidadeDeVendedores() {
+        if (vendedores.isEmpty()) return 0;
         return vendedores.size();
     }
 
