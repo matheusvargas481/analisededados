@@ -1,16 +1,12 @@
 package com.matheusvargas481.analisededados.service;
 
-import com.matheusvargas481.analisededados.domain.Cliente;
 import com.matheusvargas481.analisededados.domain.ItemDeVenda;
 import com.matheusvargas481.analisededados.domain.Venda;
-import com.matheusvargas481.analisededados.domain.Vendedor;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,19 +19,19 @@ public class VendaServiceTest {
 
     @Test
     public void testIdentificarVenda() {
-        List<Venda> vendas = vendaService.identificarVendas(getLinhasDoArquivo());
+        //List<Venda> vendas = vendaService.filtrarVendas(getLinhasDoArquivo());
      //   assertEquals(getLinhasDeVenda(), vendaService.getLinhasComVendas());
     }
 
     @Test
     public void testMontarVenda() {
-        vendaService.identificarVendas(getLinhasDoArquivo());
+        vendaService.processarLinhasComVendas(getLinhasDoArquivo());
       //  assertEquals(getVendas(), vendaService.getVendas());
     }
 
     @Test
     public void testBuscarIdDaVendaDeMaiorValor(){
-        vendaService.identificarVendas(getLinhasDoArquivo());
+        vendaService.processarLinhasComVendas(getLinhasDoArquivo());
         Long idDaVendaDeMaiorValor = vendaService.buscarIdDaVendaDeMaiorValor();
         Long idEsperado = getVendas().get(0).getId();
         assertEquals(idEsperado, idDaVendaDeMaiorValor);
@@ -43,7 +39,7 @@ public class VendaServiceTest {
 
     @Test
     public void testBuscarPiorVendedor(){
-        vendaService.identificarVendas(getLinhasDoArquivo());
+        vendaService.processarLinhasComVendas(getLinhasDoArquivo());
         String vendedor = vendaService.buscarPiorVendedor();
         String vendedorEsperado = getVendas().get(1).getNome();
         assertEquals(vendedorEsperado, vendedor);
@@ -56,17 +52,17 @@ public class VendaServiceTest {
 
     @Test
     public void testComArquivoVazio(){
-        List<Venda> vendas = vendaService.identificarVendas(getArquivoVazio());
-        assertEquals(Collections.EMPTY_LIST, vendas);
+        //List<Venda> vendas = vendaService.filtrarVendas(getArquivoVazio());
+        //assertEquals(Collections.EMPTY_LIST, vendas);
     }
 
 
     private List<String> getLinhasDoArquivo() {
         return Arrays.asList(
-                "001ç1234567891234çDiegoç50000",
-                "001ç3245678865434çRenatoç40000.99",
-                "002ç2345675434544345çJose da SilvaçRural",
-                "002ç2345675433444345çEduardo PereiraçRural",
+                "001ç1234567891234çDieçgoç50000",
+                "001ç3245678865434çRenaçtoç40000.99",
+                "002ç2345675434544345çJose da SilçvaçRural",
+                "002ç2345675433444345çEduardo PerçeiraçRural",
                 "003ç10ç[1-10-100,2-30-2.50,3-40-3.10]çDiego",
                 "003ç08ç[1-34-10,2-33-1.50,3-40-0.10]çRenato");
     }

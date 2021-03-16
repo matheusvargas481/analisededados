@@ -1,32 +1,32 @@
 package com.matheusvargas481.analisededados.service;
 
 
+import com.matheusvargas481.analisededados.domain.DadoProcessado;
 import com.matheusvargas481.analisededados.domain.ItemDeVenda;
 import com.matheusvargas481.analisededados.domain.Venda;
 import com.matheusvargas481.analisededados.exception.ErroAoMontarItemDeVendaException;
 import com.matheusvargas481.analisededados.exception.ErroAoMontarVendaException;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 public class VendaService {
-    private Logger log;
-    private List<Venda> vendas;
+    private static Logger log = LoggerFactory.getLogger(VendaService.class);
 
-    public List<Venda> identificarVendas(List<String> linhasDoArquivo) {
-        vendas = linhasDoArquivo
+    @Autowired
+    private DadoProcessado dadoProcessado;
+
+    public void processarLinhasComVendas(List<String> linhasDoArquivo) {
+        linhasDoArquivo
                 .stream()
                 .filter(this::isLinhaValidaVenda)
-                .map(this::montarVenda)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-        return vendas;
+                .forEach(this::montarVenda);
     }
 
     private boolean isLinhaValidaVenda(String venda) {
@@ -34,19 +34,18 @@ public class VendaService {
     }
 
     public Long buscarIdDaVendaDeMaiorValor() {
-        if (vendas.isEmpty()) return 0L;
-        return vendas.stream().max(Comparator.comparing(Venda::valorTotalDaVenda)).map(Venda::getId).get();
+        if (dadoProcessado.getVendas().isEmpty()) return 0L;
+        return dadoProcessado.getVendas().stream().max(Comparator.comparing(Venda::valorTotalDaVenda)).map(Venda::getId).get();
     }
 
     public String buscarPiorVendedor() {
-        if (vendas.isEmpty()) return "";
-        return vendas.stream().min(Comparator.comparing(Venda::valorTotalDaVenda)).map(Venda::getNome).get();
+        if (dadoProcessado.getVendas().isEmpty()) return "";
+        return dadoProcessado.getVendas().stream().min(Comparator.comparing(Venda::valorTotalDaVenda)).map(Venda::getNome).get();
     }
 
-    private Venda montarVenda(String linhaComVenda) {
-        vendas = new ArrayList<>();
-        String separador = linhaComVenda.substring(3, 4);
-        String[] linhasDeVendasSemSeparador = linhaComVenda.split(separador);
+    private void montarVenda(String linhaComVenda) {
+        //String separador = linhaComVenda.substring(3, 4);
+        String[] linhasDeVendasSemSeparador = linhaComVenda.split("/ç(?![a-zç])/");
 
         try {
             if (linhasDeVendasSemSeparador.length != 4) throw new ErroAoMontarVendaException();
@@ -54,11 +53,9 @@ public class VendaService {
             venda.setId(Long.parseLong(linhasDeVendasSemSeparador[1]));
             venda.setItensDeVendas(montaListaDeItemDeVenda(linhasDeVendasSemSeparador[2]));
             venda.setNome(linhasDeVendasSemSeparador[3]);
-            vendas.add(venda);
-            return venda;
+            dadoProcessado.addVenda(venda);
         } catch (ErroAoMontarVendaException e) {
             log.error("Não foi possível montar o venda: " + linhaComVenda + " pelo motivo: " + e.getCause());
-            return null;
         }
     }
 
@@ -71,7 +68,6 @@ public class VendaService {
                 .split(",");
 
         if (listaDeItens.length != 3) throw new ErroAoMontarItemDeVendaException();
-
         for (int indiceListaDeItens = 0; indiceListaDeItens < listaDeItens.length; indiceListaDeItens++) {
             String[] itemDeVendaSplit = listaDeItens[indiceListaDeItens].split("-");
             try {

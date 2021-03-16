@@ -1,11 +1,11 @@
-package com.matheusvargas481.analisededados.service.arquivo;
+package com.matheusvargas481.analisededados.arquivo;
 
+import com.matheusvargas481.analisededados.diretorio.GerenciaDiretorio;
 import com.matheusvargas481.analisededados.service.ClienteService;
-import com.matheusvargas481.analisededados.service.diretorio.DiretorioService;
 import com.matheusvargas481.analisededados.service.VendaService;
 import com.matheusvargas481.analisededados.service.VendedorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -13,8 +13,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.NoSuchElementException;
 
-@Service
-public class EscreveArquivoService {
+@Component
+public class EscreveArquivo {
     @Autowired
     private ClienteService clienteService;
     @Autowired
@@ -22,7 +22,7 @@ public class EscreveArquivoService {
     @Autowired
     private VendaService vendaService;
 
-    public EscreveArquivoService(ClienteService clienteService, VendedorService vendedorService, VendaService vendaService) {
+    public EscreveArquivo(ClienteService clienteService, VendedorService vendedorService, VendaService vendaService) {
         this.clienteService = clienteService;
         this.vendedorService = vendedorService;
         this.vendaService = vendaService;
@@ -38,6 +38,7 @@ public class EscreveArquivoService {
             bufferedWriter.write("Quantidade de Vendedores no Arquivo de entrada: " + vendedorService.buscarQuantidadeDeVendedores() + "\n");
             bufferedWriter.write("Id da Venda De Maior Valor: " + vendaService.buscarIdDaVendaDeMaiorValor() + "\n");
             bufferedWriter.write("O Pior Vendedor: " + vendaService.buscarPiorVendedor() + "\n");
+
             bufferedWriter.close();
 
         } catch (IOException e) {
@@ -47,7 +48,7 @@ public class EscreveArquivoService {
 
     private File criarArquivo() {
         try {
-            String diretorioFinal = DiretorioService.CAMINHO_SAIDA + "/out." + DiretorioService.EXTENSAO_ARQUIVO;
+            String diretorioFinal = GerenciaDiretorio.DIRETORIO_DE_SAIDA + "/out." + GerenciaDiretorio.EXTENSAO_ARQUIVO;
             File arquivo = new File(diretorioFinal);
 
             if (arquivo.exists()) {
