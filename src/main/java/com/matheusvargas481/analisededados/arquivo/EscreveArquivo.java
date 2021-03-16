@@ -1,7 +1,7 @@
 package com.matheusvargas481.analisededados.arquivo;
 
+import com.matheusvargas481.analisededados.DadoProcessado;
 import com.matheusvargas481.analisededados.diretorio.GerenciaDiretorio;
-import com.matheusvargas481.analisededados.domain.DadoProcessado;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

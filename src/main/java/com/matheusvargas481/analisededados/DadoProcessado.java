@@ -1,5 +1,8 @@
-package com.matheusvargas481.analisededados.domain;
+package com.matheusvargas481.analisededados;
 
+import com.matheusvargas481.analisededados.domain.Cliente;
+import com.matheusvargas481.analisededados.domain.Venda;
+import com.matheusvargas481.analisededados.domain.Vendedor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -46,6 +49,10 @@ public class DadoProcessado {
         return clientes.size();
     }
 
+    public int buscarQuantidadeDeVendedores() {
+        return vendedores.size();
+    }
+
     public Long buscarIdDaVendaDeMaiorValor() {
         if (vendas.isEmpty()) return 0L;
         return vendas.stream().max(Comparator.comparing(Venda::valorTotalDaVenda)).map(Venda::getId).get();
@@ -54,9 +61,5 @@ public class DadoProcessado {
     public String buscarPiorVendedor() {
         if (vendas.isEmpty()) return "";
         return vendas.stream().min(Comparator.comparing(Venda::valorTotalDaVenda)).map(Venda::getNome).get();
-    }
-
-    public int buscarQuantidadeDeVendedores() {
-        return vendedores.size();
     }
 }

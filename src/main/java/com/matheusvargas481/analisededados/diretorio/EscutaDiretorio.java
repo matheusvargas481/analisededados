@@ -3,14 +3,13 @@ package com.matheusvargas481.analisededados.diretorio;
 
 import com.matheusvargas481.analisededados.arquivo.EscreveArquivo;
 import com.matheusvargas481.analisededados.arquivo.LeArquivo;
-import com.matheusvargas481.analisededados.domain.DadoProcessado;
+import com.matheusvargas481.analisededados.DadoProcessado;
 import com.matheusvargas481.analisededados.service.ClienteService;
 import com.matheusvargas481.analisededados.service.VendaService;
 import com.matheusvargas481.analisededados.service.VendedorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
