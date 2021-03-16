@@ -1,9 +1,7 @@
 package com.matheusvargas481.analisededados.arquivo;
 
 import com.matheusvargas481.analisededados.diretorio.GerenciaDiretorio;
-import com.matheusvargas481.analisededados.service.ClienteService;
-import com.matheusvargas481.analisededados.service.VendaService;
-import com.matheusvargas481.analisededados.service.VendedorService;
+import com.matheusvargas481.analisededados.domain.DadoProcessado;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,17 +14,7 @@ import java.util.NoSuchElementException;
 @Component
 public class EscreveArquivo {
     @Autowired
-    private ClienteService clienteService;
-    @Autowired
-    private VendedorService vendedorService;
-    @Autowired
-    private VendaService vendaService;
-
-    public EscreveArquivo(ClienteService clienteService, VendedorService vendedorService, VendaService vendaService) {
-        this.clienteService = clienteService;
-        this.vendedorService = vendedorService;
-        this.vendaService = vendaService;
-    }
+    private DadoProcessado dadoProcessado;
 
     public void escreverNoArquivo() {
         try {
@@ -34,10 +22,10 @@ public class EscreveArquivo {
 
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(arquivo));
 
-            bufferedWriter.write("Quantidade de Clientes no Arquivo de entrada: " + clienteService.buscarQuantidadeDeClientes() + "\n");
-            bufferedWriter.write("Quantidade de Vendedores no Arquivo de entrada: " + vendedorService.buscarQuantidadeDeVendedores() + "\n");
-            bufferedWriter.write("Id da Venda De Maior Valor: " + vendaService.buscarIdDaVendaDeMaiorValor() + "\n");
-            bufferedWriter.write("O Pior Vendedor: " + vendaService.buscarPiorVendedor() + "\n");
+            bufferedWriter.write("Quantidade de Clientes no Arquivo de entrada: " + dadoProcessado.buscarQuantidadeDeClientes() + "\n");
+            bufferedWriter.write("Quantidade de Vendedores no Arquivo de entrada: " + dadoProcessado.buscarQuantidadeDeVendedores() + "\n");
+            bufferedWriter.write("Id da Venda De Maior Valor: " + dadoProcessado.buscarIdDaVendaDeMaiorValor() + "\n");
+            bufferedWriter.write("O Pior Vendedor: " + dadoProcessado.buscarPiorVendedor() + "\n");
 
             bufferedWriter.close();
 

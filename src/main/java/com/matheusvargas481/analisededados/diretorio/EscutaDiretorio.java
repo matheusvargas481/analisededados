@@ -10,6 +10,8 @@ import com.matheusvargas481.analisededados.service.VendedorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -35,19 +37,27 @@ public class EscutaDiretorio {
     @Autowired
     private EscreveArquivo escreveArquivo;
 
+    @Autowired
+    private Environment environment;
+
     private WatchService watchService = null;
     private WatchKey key;
 
+    @Autowired
+    Environment env;
+
+
     @PostConstruct
     public void escutarDiretorio() {
-        gerenciaDiretorio.criarDiretorioDeEntrada();
+        if(env.acceptsProfiles("!test")) {
+            gerenciaDiretorio.criarDiretorioDeEntrada();
 
-        gerenciaDiretorio.criaDiretorioDeSaida();
+            gerenciaDiretorio.criaDiretorioDeSaida();
 
-        registrarDiretorio(criarDiretorio());
+            registrarDiretorio(criarDiretorio());
 
-        criarChaveDeObservacaoDoDiretorio();
-
+            criarChaveDeObservacaoDoDiretorio();
+        }
     }
 
     private Path criarDiretorio() {
@@ -89,9 +99,9 @@ public class EscutaDiretorio {
     private void processaArquivos() {
         dadoProcessado.limparListas();
         List<String> linhasDosArquivos = leArquivo.lerArquivo();
-        clienteService.processarLinhasComClientes(linhasDosArquivos);
-        vendaService.processarLinhasComVendas(linhasDosArquivos);
-        vendedorService.processarLinhasComVendedores(linhasDosArquivos);
+        dadoProcessado.setClientes(clienteService.processarLinhasComClientes(linhasDosArquivos));
+        dadoProcessado.setVendas(vendaService.processarLinhasComVendas(linhasDosArquivos));
+        dadoProcessado.setVendedores(vendedorService.processarLinhasComVendedores(linhasDosArquivos));
         escreveArquivo.escreverNoArquivo();
     }
 
