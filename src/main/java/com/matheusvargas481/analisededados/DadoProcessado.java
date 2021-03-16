@@ -6,15 +6,16 @@ import com.matheusvargas481.analisededados.domain.Vendedor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 @Component
 public class DadoProcessado {
+
     private List<Cliente> clientes = new ArrayList<>();
     private List<Vendedor> vendedores = new ArrayList<>();
     private List<Venda> vendas = new ArrayList<>();
+
 
     public void limparListas() {
         clientes = new ArrayList<>();
@@ -47,12 +48,12 @@ public class DadoProcessado {
     }
 
     public int buscarQuantidadeDeClientes() {
-        if (clientes.isEmpty()) return Collections.EMPTY_LIST.size();
+        if (clientes.isEmpty()) return 0;
         return clientes.size();
     }
 
     public int buscarQuantidadeDeVendedores() {
-        if (vendedores.isEmpty()) return Collections.EMPTY_LIST.size();
+        if (vendedores.isEmpty()) return 0;
         return vendedores.size();
     }
 
@@ -65,4 +66,5 @@ public class DadoProcessado {
         if (vendas.isEmpty()) return "";
         return vendas.stream().min(Comparator.comparing(Venda::valorTotalDaVenda)).map(Venda::getNome).get();
     }
+
 }

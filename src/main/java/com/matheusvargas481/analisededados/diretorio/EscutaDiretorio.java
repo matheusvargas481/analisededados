@@ -1,12 +1,8 @@
 package com.matheusvargas481.analisededados.diretorio;
 
 
-import com.matheusvargas481.analisededados.arquivo.EscreveArquivo;
-import com.matheusvargas481.analisededados.arquivo.LeArquivo;
 import com.matheusvargas481.analisededados.DadoProcessado;
-import com.matheusvargas481.analisededados.service.ClienteService;
-import com.matheusvargas481.analisededados.service.VendaService;
-import com.matheusvargas481.analisededados.service.VendedorService;
+import com.matheusvargas481.analisededados.service.ProcessaDadoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +12,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.nio.file.*;
-import java.util.List;
 
 @Component
 public class EscutaDiretorio {
@@ -24,18 +19,7 @@ public class EscutaDiretorio {
     @Autowired
     private GerenciaDiretorio gerenciaDiretorio;
     @Autowired
-    private LeArquivo leArquivo;
-    @Autowired
-    private VendedorService vendedorService;
-    @Autowired
-    private VendaService vendaService;
-    @Autowired
-    private ClienteService clienteService;
-    @Autowired
-    private DadoProcessado dadoProcessado;
-    @Autowired
-    private EscreveArquivo escreveArquivo;
-
+    private ProcessaDadoService processaDadoService;
     @Autowired
     private Environment environment;
 
@@ -48,7 +32,7 @@ public class EscutaDiretorio {
 
     @PostConstruct
     public void escutarDiretorio() {
-        if(env.acceptsProfiles("!test")) {
+        if (env.acceptsProfiles("!test")) {
             gerenciaDiretorio.criarDiretorioDeEntrada();
 
             gerenciaDiretorio.criaDiretorioDeSaida();
@@ -85,7 +69,7 @@ public class EscutaDiretorio {
                 e.printStackTrace();
             }
 
-            processaArquivos();
+            processaDadoService.processarArquivos();
 
             for (WatchEvent<?> event : key.pollEvents()) {
                 log.info("Tipo de mudança :" + event.kind()
@@ -94,14 +78,4 @@ public class EscutaDiretorio {
             key.reset();
         }
     }
-
-    private void processaArquivos() {
-        dadoProcessado.limparListas();
-        List<String> linhasDosArquivos = leArquivo.lerArquivo();
-        dadoProcessado.setClientes(clienteService.processarLinhasComClientes(linhasDosArquivos));
-        dadoProcessado.setVendas(vendaService.processarLinhasComVendas(linhasDosArquivos));
-        dadoProcessado.setVendedores(vendedorService.processarLinhasComVendedores(linhasDosArquivos));
-        escreveArquivo.escreverNoArquivo();
-    }
-
 }
