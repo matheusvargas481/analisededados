@@ -1,8 +1,9 @@
 package com.matheusvargas481.analisededados.arquivo;
 
-import com.matheusvargas481.analisededados.DadoProcessado;
 import com.matheusvargas481.analisededados.diretorio.GerenciaDiretorio;
 import com.matheusvargas481.analisededados.domain.DadoFinalParaEscritaNoArquivo;
+import com.matheusvargas481.analisededados.domain.DadoProcessado;
+import com.matheusvargas481.analisededados.exception.ErroAoEscreverArquivoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,12 +19,12 @@ public class EscreveArquivo {
     private DadoProcessado dadoProcessado;
 
     public void escreverNoArquivo() {
+
         DadoFinalParaEscritaNoArquivo dadoFinalParaEscritaNoArquivo = new DadoFinalParaEscritaNoArquivo();
         dadoFinalParaEscritaNoArquivo.setQuantidadeDeCliente(dadoProcessado.buscarQuantidadeDeClientes());
         dadoFinalParaEscritaNoArquivo.setQuantidadeDeVendedor(dadoProcessado.buscarQuantidadeDeVendedores());
         dadoFinalParaEscritaNoArquivo.setIdDaVendaDeMaiorValor(dadoProcessado.buscarIdDaVendaDeMaiorValor());
         dadoFinalParaEscritaNoArquivo.setNomePiorVendedor(dadoProcessado.buscarPiorVendedor());
-
 
         try {
             File arquivo = criarArquivo();
@@ -38,13 +39,14 @@ public class EscreveArquivo {
             bufferedWriter.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ErroAoEscreverArquivoException(e.getMessage());
         }
     }
 
     private File criarArquivo() {
         try {
             String diretorioFinal = GerenciaDiretorio.DIRETORIO_DE_SAIDA + "/out." + GerenciaDiretorio.EXTENSAO_ARQUIVO;
+
             File arquivo = new File(diretorioFinal);
 
             if (arquivo.exists()) {
@@ -56,7 +58,7 @@ public class EscreveArquivo {
             return arquivo;
 
         } catch (IOException | NoSuchElementException e) {
-            throw new RuntimeException("Falha ao escrever resultados !");
+            throw new ErroAoEscreverArquivoException(e.getMessage());
         }
     }
 

@@ -1,7 +1,5 @@
 package com.matheusvargas481.analisededados.diretorio;
 
-
-import com.matheusvargas481.analisededados.DadoProcessado;
 import com.matheusvargas481.analisededados.service.ProcessaDadoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +13,7 @@ import java.nio.file.*;
 
 @Component
 public class EscutaDiretorio {
-    private static Logger log = LoggerFactory.getLogger(EscutaDiretorio.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(EscutaDiretorio.class);
     @Autowired
     private GerenciaDiretorio gerenciaDiretorio;
     @Autowired
@@ -61,7 +59,6 @@ public class EscutaDiretorio {
     }
 
     private void criarChaveDeObservacaoDoDiretorio() {
-
         while (true) {
             try {
                 if (!((key = watchService.take()) != null)) break;
@@ -72,7 +69,7 @@ public class EscutaDiretorio {
             processaDadoService.processarArquivos();
 
             for (WatchEvent<?> event : key.pollEvents()) {
-                log.info("Tipo de mudança :" + event.kind()
+                LOGGER.info("Tipo de mudança :" + event.kind()
                         + ". Arquivo afetado: " + event.context() + ".");
             }
             key.reset();

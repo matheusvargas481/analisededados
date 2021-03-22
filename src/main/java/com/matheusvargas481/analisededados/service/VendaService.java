@@ -5,6 +5,7 @@ import com.matheusvargas481.analisededados.domain.ItemDeVenda;
 import com.matheusvargas481.analisededados.domain.Venda;
 import com.matheusvargas481.analisededados.exception.ErroAoMontarItemDeVendaException;
 import com.matheusvargas481.analisededados.exception.ErroAoMontarVendaException;
+import com.matheusvargas481.analisededados.util.Separador;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-public class VendaService {
-    private static Logger log = LoggerFactory.getLogger(VendaService.class);
+public class VendaService extends Separador {
+    private static Logger LOGGER = LoggerFactory.getLogger(VendaService.class);
 
     public List<Venda> processarLinhasComVendas(List<String> linhasDoArquivo) {
         return linhasDoArquivo
@@ -32,20 +33,20 @@ public class VendaService {
     }
 
     private Venda montarVenda(String linhaComVenda) {
-        String separador = linhaComVenda.substring(3, 4);
-        if (separador.equalsIgnoreCase("ç"))
-            separador = "ç(?![a-zç])";
-        String[] linhasDeVendasSemSeparador = linhaComVenda.split(separador);
+
+        String[] linhasDeVendasSemSeparador = separarLinhaParaMontarObjeto(linhaComVenda);
 
         try {
             if (linhasDeVendasSemSeparador.length != 4) throw new ErroAoMontarVendaException();
-            Venda venda = new Venda();
-            venda.setId(Long.parseLong(linhasDeVendasSemSeparador[1]));
-            venda.setItensDeVendas(montaListaDeItemDeVenda(linhasDeVendasSemSeparador[2]));
-            venda.setNome(linhasDeVendasSemSeparador[3]);
-            return venda;
+
+            return new Venda(
+                    Long.parseLong(linhasDeVendasSemSeparador[1]),
+                    montaListaDeItemDeVenda(linhasDeVendasSemSeparador[2]),
+                    linhasDeVendasSemSeparador[3]
+            );
+
         } catch (ErroAoMontarVendaException e) {
-            log.error("Não foi possível montar o venda: " + linhaComVenda + " pelo motivo: " + e.getCause());
+            LOGGER.error("Não foi possível montar o venda: " + linhaComVenda + " pelo motivo: " + e.getCause());
             return null;
         }
     }
@@ -59,19 +60,21 @@ public class VendaService {
                 .split(",");
 
         if (listaDeItens.length != 3) throw new ErroAoMontarItemDeVendaException();
-        for (int indiceListaDeItens = 0; indiceListaDeItens < listaDeItens.length; indiceListaDeItens++) {
-            String[] itemDeVendaSplit = listaDeItens[indiceListaDeItens].split("-");
+
+        for (int indiceItensDeVenda = 0; indiceItensDeVenda < listaDeItens.length; indiceItensDeVenda++) {
+            String[] itemDeVendaSeparado = listaDeItens[indiceItensDeVenda].split("-");
             try {
                 ItemDeVenda itemDeVenda = new ItemDeVenda();
-                itemDeVenda.setId(Long.parseLong(itemDeVendaSplit[0]));
-                itemDeVenda.setQuantidade(Integer.parseInt(itemDeVendaSplit[1]));
-                itemDeVenda.setPreco(Double.parseDouble(itemDeVendaSplit[2]));
+                itemDeVenda.setId(Long.parseLong(itemDeVendaSeparado[0]));
+                itemDeVenda.setQuantidade(Integer.parseInt(itemDeVendaSeparado[1]));
+                itemDeVenda.setPreco(Double.parseDouble(itemDeVendaSeparado[2]));
                 itensDeVendas.add(itemDeVenda);
             } catch (ErroAoMontarItemDeVendaException e) {
-                log.error("Não foi possível montar o item de venda: " + itemDeVendaSplit + " pelo motivo: " + e.getCause());
+                LOGGER.error("Não foi possível montar o item de venda: " + itemDeVendaSeparado + " pelo motivo: " + e.getCause());
                 return null;
             }
         }
         return itensDeVendas;
     }
+
 }

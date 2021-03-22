@@ -2,6 +2,7 @@ package com.matheusvargas481.analisededados.service;
 
 import com.matheusvargas481.analisededados.domain.Cliente;
 import com.matheusvargas481.analisededados.exception.ErroAoMontarClienteException;
+import com.matheusvargas481.analisededados.util.Separador;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -11,8 +12,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-public class ClienteService {
-    private static Logger log = LoggerFactory.getLogger(ClienteService.class);
+public class ClienteService extends Separador {
+    private static Logger LOGGER = LoggerFactory.getLogger(ClienteService.class);
 
     public List<Cliente> processarLinhasComClientes(List<String> linhasDoArquivo) {
         return linhasDoArquivo.stream()
@@ -26,11 +27,8 @@ public class ClienteService {
         return cliente.startsWith(Cliente.COMECA_COM_002);
     }
 
-    private Cliente montarCliente(String linhaDeCliente) {
-        String separador = linhaDeCliente.substring(3, 4);
-        if (separador.equalsIgnoreCase("ç"))
-            separador = "ç(?![a-zç])";
-        String[] linhasDeClienteSemSeparador = linhaDeCliente.split(separador);
+    private Cliente montarCliente(String linhaComCliente) {
+        String[] linhasDeClienteSemSeparador = separarLinhaParaMontarObjeto(linhaComCliente);
 
         try {
             if (linhasDeClienteSemSeparador.length != 4) throw new ErroAoMontarClienteException();
@@ -42,7 +40,7 @@ public class ClienteService {
             return cliente;
 
         } catch (ErroAoMontarClienteException e) {
-            log.error("Não foi possível montar o cliente: {} pelo motivo: {}", linhaDeCliente, e.getCause());
+            LOGGER.error("Não foi possível montar o cliente: {}", linhaComCliente);
             return null;
         }
     }

@@ -13,7 +13,7 @@ import java.util.List;
 
 @Component
 public class LeArquivo {
-    public List<String> lerArquivo() {
+    public List<String> lerLinhasDoArquivo() {
         File dir = new File(GerenciaDiretorio.DIRETORIO_DE_ENTRADA);
         String linha;
         List<String> linhasDoArquivo = new ArrayList<>();

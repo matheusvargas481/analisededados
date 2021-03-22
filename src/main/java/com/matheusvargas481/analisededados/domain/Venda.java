@@ -8,9 +8,6 @@ public class Venda {
     private List<ItemDeVenda> itensDeVendas;
     private String nome;
 
-    public Venda() {
-    }
-
     public Venda(Long id, List<ItemDeVenda> itensDeVendas, String nome) {
         this.id = id;
         this.itensDeVendas = itensDeVendas;

@@ -1,8 +1,5 @@
-package com.matheusvargas481.analisededados;
+package com.matheusvargas481.analisededados.domain;
 
-import com.matheusvargas481.analisededados.domain.Cliente;
-import com.matheusvargas481.analisededados.domain.Venda;
-import com.matheusvargas481.analisededados.domain.Vendedor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -15,13 +12,6 @@ public class DadoProcessado {
     private List<Cliente> clientes = new ArrayList<>();
     private List<Vendedor> vendedores = new ArrayList<>();
     private List<Venda> vendas = new ArrayList<>();
-
-
-    public void limparListas() {
-        clientes = new ArrayList<>();
-        vendedores = new ArrayList<>();
-        vendas = new ArrayList<>();
-    }
 
     public List<Cliente> getClientes() {
         return clientes;

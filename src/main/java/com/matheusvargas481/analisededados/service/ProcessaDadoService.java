@@ -1,8 +1,8 @@
 package com.matheusvargas481.analisededados.service;
 
-import com.matheusvargas481.analisededados.DadoProcessado;
 import com.matheusvargas481.analisededados.arquivo.EscreveArquivo;
 import com.matheusvargas481.analisededados.arquivo.LeArquivo;
+import com.matheusvargas481.analisededados.domain.DadoProcessado;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +24,8 @@ public class ProcessaDadoService {
     private LeArquivo leArquivo;
 
     public void processarArquivos() {
-        limparListasDadoProcessado();
-        processarLinhasDosArquivos(leArquivo.lerArquivo());
+        new DadoProcessado();
+        processarLinhasDosArquivos(leArquivo.lerLinhasDoArquivo());
         escreverResultadoFinalNoArquivo();
     }
 
@@ -35,11 +35,7 @@ public class ProcessaDadoService {
         dadoProcessado.setVendedores(vendedorService.processarLinhasComVendedores(linhasDosArquivos));
     }
 
-    private void limparListasDadoProcessado(){
-        dadoProcessado.limparListas();
-    }
-
-    private void escreverResultadoFinalNoArquivo(){
+    private void escreverResultadoFinalNoArquivo() {
         escreveArquivo.escreverNoArquivo();
     }
 }
