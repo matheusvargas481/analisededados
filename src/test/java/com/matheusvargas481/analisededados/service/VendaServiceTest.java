@@ -82,7 +82,7 @@ public class VendaServiceTest {
     @Test
     public void testMontarItemDeVendaColunasDivergentesDoEsperado() {
         vendas = vendaService.processarLinhasComVendas(getLinhasDeVendaContendoDivergenciaNoItemDeVenda());
-        assertEquals(getVendasComItensDeVendasDivergencia(), vendas);
+        assertEquals(getVendasComItensDeVendasComDivergencia(), vendas);
     }
 
 
@@ -173,7 +173,7 @@ public class VendaServiceTest {
         return Arrays.asList(vendaEsperada);
     }
 
-    private List<Venda> getVendasComItensDeVendasDivergencia() {
+    private List<Venda> getVendasComItensDeVendasComDivergencia() {
         Venda vendaEsperadaUm = new Venda(10L, Collections.EMPTY_LIST, "Diego");
         Venda vendaEsperadaDois = new Venda(8L, Collections.EMPTY_LIST, "Renato");
         Venda vendaEsperadaTres = new Venda(8L, Arrays.asList(

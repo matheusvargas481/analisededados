@@ -77,12 +77,11 @@ public class VendedorServiceTest {
         assertEquals(getVendedoresComDadosFaltando(), vendedores);
     }
 
-    //TODO REVER
-//    @Test
-//    public void testSalarioDoVendedorContendoLetras() {
-//        vendedores = vendedorService.processarLinhasComVendedores(getLinhasDeVendedoresComLetrasNoSalario());
-//        assertEquals(Collections.EMPTY_LIST, vendedores);
-//    }
+    @Test
+    public void testVendedorContendoLetrasNoSalario() {
+        vendedores = vendedorService.processarLinhasComVendedores(getLinhasDeVendedoresComLetrasNoSalario());
+        assertEquals(getVendedores(), vendedores);
+    }
 
 
 
@@ -99,7 +98,7 @@ public class VendedorServiceTest {
     private List<String> getLinhasDeVendedoresComLetrasNoSalario() {
         return Arrays.asList(
                 "001ç1234567891234çDiegoç50000Y",
-                "001ç3245678865434çRenatoç40000.9D");
+                "001ç3245678865434çRenatoç40000.99D");
     }
 
 
