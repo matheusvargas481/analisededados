@@ -31,13 +31,16 @@ public class ClienteService extends Separador {
         String[] linhasDeClienteSemSeparador = separarLinhaParaMontarObjeto(linhaComCliente);
 
         try {
-            if (linhasDeClienteSemSeparador.length != 4) throw new ErroAoMontarClienteException();
-            Cliente cliente = new Cliente();
-            cliente.setCnpj(linhasDeClienteSemSeparador[1]);
-            cliente.setNome(linhasDeClienteSemSeparador[2]);
-            cliente.setAreaDeNegocio(linhasDeClienteSemSeparador[3]);
+            if (linhasDeClienteSemSeparador.length == 4) {
+                Cliente cliente = new Cliente();
+                cliente.setCnpj(linhasDeClienteSemSeparador[1]);
+                cliente.setNome(linhasDeClienteSemSeparador[2]);
+                cliente.setAreaDeNegocio(linhasDeClienteSemSeparador[3]);
 
-            return cliente;
+                return cliente;
+
+            }
+            throw new ErroAoMontarClienteException();
 
         } catch (ErroAoMontarClienteException e) {
             LOGGER.error("Não foi possível montar o cliente: {}", linhaComCliente);

@@ -32,20 +32,19 @@ public class VendedorService extends Separador {
         String[] linhasDeVendedorSemSeparador = separarLinhaParaMontarObjeto(linhaComVendedor);
 
         try {
-            if (linhasDeVendedorSemSeparador.length != 4) throw new ErroAoMontarVendedorException();
-            Vendedor vendedor = new Vendedor();
-            vendedor.setCpf(linhasDeVendedorSemSeparador[1]);
-            vendedor.setNome(linhasDeVendedorSemSeparador[2]);
-            vendedor.setSalario(Double.parseDouble(linhasDeVendedorSemSeparador[3]));
-            return vendedor;
+            if (linhasDeVendedorSemSeparador.length == 4) {
+                Vendedor vendedor = new Vendedor();
+                vendedor.setCpf(linhasDeVendedorSemSeparador[1]);
+                vendedor.setNome(linhasDeVendedorSemSeparador[2]);
+                vendedor.setSalario(Double.parseDouble(linhasDeVendedorSemSeparador[3]));
+                return vendedor;
+
+            }
+            throw new ErroAoMontarVendedorException();
 
         } catch (ErroAoMontarVendedorException e) {
             LOGGER.error("Não foi possível montar o vendedor: {} pelo motivo: {}", linhaComVendedor, e.getCause());
             return null;
         }
-    }
-
-    private boolean isSalarioValido(String[] linhasDeVendedorSemSeparador) {
-        return linhasDeVendedorSemSeparador[3].matches("[A-Z]*");
     }
 }

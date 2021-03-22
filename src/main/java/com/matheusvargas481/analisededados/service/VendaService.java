@@ -33,18 +33,17 @@ public class VendaService extends Separador {
     }
 
     private Venda montarVenda(String linhaComVenda) {
-
         String[] linhasDeVendasSemSeparador = separarLinhaParaMontarObjeto(linhaComVenda);
 
         try {
-            if (linhasDeVendasSemSeparador.length != 4) throw new ErroAoMontarVendaException();
-
-            return new Venda(
-                    Long.parseLong(linhasDeVendasSemSeparador[1]),
-                    montaListaDeItemDeVenda(linhasDeVendasSemSeparador[2]),
-                    linhasDeVendasSemSeparador[3]
-            );
-
+            if (linhasDeVendasSemSeparador.length == 4) {
+                Venda venda = new Venda();
+                venda.setId(Long.parseLong(linhasDeVendasSemSeparador[1]));
+                venda.setItensDeVendas(montaListaDeItemDeVenda(linhasDeVendasSemSeparador[2]));
+                venda.setNome(linhasDeVendasSemSeparador[3]);
+                return venda;
+            }
+            throw new ErroAoMontarVendaException();
         } catch (ErroAoMontarVendaException e) {
             LOGGER.error("Não foi possível montar o venda: " + linhaComVenda + " pelo motivo: " + e.getCause());
             return null;
@@ -59,19 +58,21 @@ public class VendaService extends Separador {
                 .replace("]", "")
                 .split(",");
 
-        if (listaDeItens.length != 3) throw new ErroAoMontarItemDeVendaException();
-
         for (int indiceItensDeVenda = 0; indiceItensDeVenda < listaDeItens.length; indiceItensDeVenda++) {
             String[] itemDeVendaSeparado = listaDeItens[indiceItensDeVenda].split("-");
+
             try {
-                ItemDeVenda itemDeVenda = new ItemDeVenda();
-                itemDeVenda.setId(Long.parseLong(itemDeVendaSeparado[0]));
-                itemDeVenda.setQuantidade(Integer.parseInt(itemDeVendaSeparado[1]));
-                itemDeVenda.setPreco(Double.parseDouble(itemDeVendaSeparado[2]));
-                itensDeVendas.add(itemDeVenda);
+                if (itemDeVendaSeparado.length == 3 && listaDeItens.length == 3) {
+                    ItemDeVenda itemDeVenda = new ItemDeVenda();
+                    itemDeVenda.setId(Long.parseLong(itemDeVendaSeparado[0]));
+                    itemDeVenda.setQuantidade(Integer.parseInt(itemDeVendaSeparado[1]));
+                    itemDeVenda.setPreco(Double.parseDouble(itemDeVendaSeparado[2]));
+                    itensDeVendas.add(itemDeVenda);
+                }
+                throw new ErroAoMontarItemDeVendaException();
+
             } catch (ErroAoMontarItemDeVendaException e) {
                 LOGGER.error("Não foi possível montar o item de venda: " + itemDeVendaSeparado + " pelo motivo: " + e.getCause());
-                return null;
             }
         }
         return itensDeVendas;
