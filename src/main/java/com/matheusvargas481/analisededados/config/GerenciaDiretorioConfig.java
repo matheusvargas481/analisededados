@@ -1,6 +1,6 @@
-package com.matheusvargas481.analisededados.diretorio;
+package com.matheusvargas481.analisededados.config;
 
-import com.matheusvargas481.analisededados.exception.ErroAoCriarDiretorioException;
+import com.matheusvargas481.analisededados.exception.ErroNaCriacaoDoDiretorioException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -12,13 +12,13 @@ import java.nio.file.Paths;
 import java.util.NoSuchElementException;
 
 @Component
-public class GerenciaDiretorio {
+public class GerenciaDiretorioConfig {
 
     public static final String DIRETORIO_RAIZ = System.getProperty("user.home");
     public static final String DIRETORIO_DE_ENTRADA = DIRETORIO_RAIZ + "/data/in";
     public static final String DIRETORIO_DE_SAIDA = DIRETORIO_RAIZ + "/data/out";
     public static final String EXTENSAO_ARQUIVO = "dat";
-    private static Logger LOGGER = LoggerFactory.getLogger(GerenciaDiretorio.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(GerenciaDiretorioConfig.class);
 
     public void criarDiretorioDeEntrada() {
         Path diretorioDeEntrada = Paths.get(DIRETORIO_DE_ENTRADA);
@@ -38,7 +38,7 @@ public class GerenciaDiretorio {
                 Files.createDirectories(diretorio);
                 LOGGER.info("Novo diretório criado com sucesso !");
             } catch (IOException | NoSuchElementException exception) {
-                throw new ErroAoCriarDiretorioException();
+                throw new ErroNaCriacaoDoDiretorioException();
             }
         }
     }

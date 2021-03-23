@@ -1,8 +1,8 @@
 package com.matheusvargas481.analisededados.exception;
 
-public class ErroAoEscreverArquivoException extends RuntimeException {
+public class ErroNaEscritaDoArquivoException extends RuntimeException {
 
-    public ErroAoEscreverArquivoException(String mensagem) {
+    public ErroNaEscritaDoArquivoException(String mensagem) {
         super("Ocorreu um problema durante a escrita do arquivo. Exception: " + mensagem);
     }
 }

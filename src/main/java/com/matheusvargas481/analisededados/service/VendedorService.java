@@ -1,13 +1,12 @@
 package com.matheusvargas481.analisededados.service;
 
 import com.matheusvargas481.analisededados.domain.Vendedor;
-import com.matheusvargas481.analisededados.exception.ErroAoMontarVendedorException;
+import com.matheusvargas481.analisededados.exception.LayoutDeVendedorDiferenteDoEsperadoException;
 import com.matheusvargas481.analisededados.util.Separador;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.security.PublicKey;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -42,15 +41,15 @@ public class VendedorService extends Separador {
 
                 return vendedor;
             }
-            throw new ErroAoMontarVendedorException();
+            throw new LayoutDeVendedorDiferenteDoEsperadoException();
 
-        } catch (ErroAoMontarVendedorException e) {
+        } catch (LayoutDeVendedorDiferenteDoEsperadoException e) {
             LOGGER.error("Não foi possível montar o vendedor: {} pelo motivo: {}", linhaComVendedor, e.getCause());
             return null;
         }
     }
 
-    public String removerLetrasDoSalario(String salario){
+    public String removerLetrasDoSalario(String salario) {
         return salario.replaceAll(REGEX_RETIRA_LETRAS_CAMPO_SALARIO, "");
     }
 }

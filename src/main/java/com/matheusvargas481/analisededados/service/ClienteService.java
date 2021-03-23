@@ -1,7 +1,7 @@
 package com.matheusvargas481.analisededados.service;
 
 import com.matheusvargas481.analisededados.domain.Cliente;
-import com.matheusvargas481.analisededados.exception.ErroAoMontarClienteException;
+import com.matheusvargas481.analisededados.exception.LayoutDoClienteDiferenteDoEsperadoException;
 import com.matheusvargas481.analisededados.util.Separador;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,9 +40,9 @@ public class ClienteService extends Separador {
                 return cliente;
 
             }
-            throw new ErroAoMontarClienteException();
+            throw new LayoutDoClienteDiferenteDoEsperadoException();
 
-        } catch (ErroAoMontarClienteException e) {
+        } catch (LayoutDoClienteDiferenteDoEsperadoException e) {
             LOGGER.error("Não foi possível montar o cliente: {}", linhaComCliente);
             return null;
         }

@@ -1,6 +1,7 @@
 package com.matheusvargas481.analisededados.domain;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Venda {
     public static final String COMECA_COM_003 = "003";
@@ -55,8 +56,11 @@ public class Venda {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Venda venda = (Venda) o;
-        return id.equals(venda.id) &&
-                itensDeVendas.equals(venda.itensDeVendas) &&
-                nome.equals(venda.nome);
+        return Objects.equals(id, venda.id) && Objects.equals(itensDeVendas, venda.itensDeVendas) && Objects.equals(nome, venda.nome);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, itensDeVendas, nome);
     }
 }

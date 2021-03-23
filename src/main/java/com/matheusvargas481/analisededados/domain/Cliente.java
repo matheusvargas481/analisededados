@@ -1,5 +1,7 @@
 package com.matheusvargas481.analisededados.domain;
 
+import java.util.Objects;
+
 public class Cliente {
     public static final String COMECA_COM_002 = "002";
     private String cnpj;
@@ -53,8 +55,11 @@ public class Cliente {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Cliente cliente = (Cliente) o;
-        return cnpj.equals(cliente.cnpj) &&
-                nome.equals(cliente.nome) &&
-                areaDeNegocio.equals(cliente.areaDeNegocio);
+        return Objects.equals(cnpj, cliente.cnpj) && Objects.equals(nome, cliente.nome) && Objects.equals(areaDeNegocio, cliente.areaDeNegocio);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cnpj, nome, areaDeNegocio);
     }
 }

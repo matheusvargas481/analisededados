@@ -1,5 +1,8 @@
 package com.matheusvargas481.analisededados.domain;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class DadoFinalParaEscritaNoArquivo {
     private int quantidadeDeCliente;
     private int quantidadeDeVendedor;

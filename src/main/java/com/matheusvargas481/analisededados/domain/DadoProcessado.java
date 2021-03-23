@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-@Component
 public class DadoProcessado {
 
     private List<Cliente> clientes = new ArrayList<>();
     private List<Vendedor> vendedores = new ArrayList<>();
     private List<Venda> vendas = new ArrayList<>();
+
 
     public List<Cliente> getClientes() {
         return clientes;

@@ -3,8 +3,8 @@ package com.matheusvargas481.analisededados.service;
 
 import com.matheusvargas481.analisededados.domain.ItemDeVenda;
 import com.matheusvargas481.analisededados.domain.Venda;
-import com.matheusvargas481.analisededados.exception.ErroAoMontarItemDeVendaException;
-import com.matheusvargas481.analisededados.exception.ErroAoMontarVendaException;
+import com.matheusvargas481.analisededados.exception.LayoutDeVendaDiferenteDoEsperadoException;
+import com.matheusvargas481.analisededados.exception.LayoutDoItemDeVendaDiferenteDoEsperadoException;
 import com.matheusvargas481.analisededados.util.Separador;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,8 +43,8 @@ public class VendaService extends Separador {
                 venda.setNome(linhasDeVendasSemSeparador[3]);
                 return venda;
             }
-            throw new ErroAoMontarVendaException();
-        } catch (ErroAoMontarVendaException e) {
+            throw new LayoutDeVendaDiferenteDoEsperadoException();
+        } catch (LayoutDeVendaDiferenteDoEsperadoException e) {
             LOGGER.error("Não foi possível montar o venda: " + linhaComVenda + " pelo motivo: " + e.getCause());
             return null;
         }
@@ -68,10 +68,10 @@ public class VendaService extends Separador {
                     itemDeVenda.setQuantidade(Integer.parseInt(itemDeVendaSeparado[1]));
                     itemDeVenda.setPreco(Double.parseDouble(itemDeVendaSeparado[2]));
                     itensDeVendas.add(itemDeVenda);
+                }else {
+                    throw new LayoutDoItemDeVendaDiferenteDoEsperadoException();
                 }
-                throw new ErroAoMontarItemDeVendaException();
-
-            } catch (ErroAoMontarItemDeVendaException e) {
+            } catch (LayoutDoItemDeVendaDiferenteDoEsperadoException e) {
                 LOGGER.error("Não foi possível montar o item de venda: " + itemDeVendaSeparado + " pelo motivo: " + e.getCause());
             }
         }

@@ -1,39 +1,38 @@
-package com.matheusvargas481.analisededados.diretorio;
+package com.matheusvargas481.analisededados.service;
 
-import com.matheusvargas481.analisededados.service.ProcessaDadoService;
+import com.matheusvargas481.analisededados.config.GerenciaDiretorioConfig;
+import com.matheusvargas481.analisededados.domain.DadoProcessado;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.nio.file.*;
 
-@Component
-public class EscutaDiretorio {
-    private static Logger LOGGER = LoggerFactory.getLogger(EscutaDiretorio.class);
+@Service
+public class EscutaDiretorioService {
+    private static Logger LOGGER = LoggerFactory.getLogger(EscutaDiretorioService.class);
     @Autowired
-    private GerenciaDiretorio gerenciaDiretorio;
+    private GerenciaDiretorioConfig gerenciaDiretorioConfig;
     @Autowired
     private ProcessaDadoService processaDadoService;
     @Autowired
-    private Environment environment;
+    private Environment env;
 
     private WatchService watchService = null;
-    private WatchKey key;
 
-    @Autowired
-    Environment env;
+    private WatchKey key;
 
 
     @PostConstruct
     public void escutarDiretorio() {
         if (env.acceptsProfiles("!test")) {
-            gerenciaDiretorio.criarDiretorioDeEntrada();
+            gerenciaDiretorioConfig.criarDiretorioDeEntrada();
 
-            gerenciaDiretorio.criaDiretorioDeSaida();
+            gerenciaDiretorioConfig.criaDiretorioDeSaida();
 
             registrarDiretorio(criarDiretorio());
 
@@ -42,7 +41,7 @@ public class EscutaDiretorio {
     }
 
     private Path criarDiretorio() {
-        return Paths.get(GerenciaDiretorio.DIRETORIO_DE_ENTRADA);
+        return Paths.get(GerenciaDiretorioConfig.DIRETORIO_DE_ENTRADA);
     }
 
     private void registrarDiretorio(Path caminho) {
@@ -58,14 +57,14 @@ public class EscutaDiretorio {
         }
     }
 
-    private void criarChaveDeObservacaoDoDiretorio() {
+    private void criarChaveDeObservacaoDoDiretorio()  {
         while (true) {
             try {
                 if (!((key = watchService.take()) != null)) break;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
+            new DadoProcessado();
             processaDadoService.processarArquivos();
 
             for (WatchEvent<?> event : key.pollEvents()) {

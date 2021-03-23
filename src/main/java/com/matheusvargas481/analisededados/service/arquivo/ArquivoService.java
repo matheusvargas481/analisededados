@@ -1,26 +1,25 @@
-package com.matheusvargas481.analisededados.arquivo;
+package com.matheusvargas481.analisededados.service.arquivo;
 
-import com.matheusvargas481.analisededados.diretorio.GerenciaDiretorio;
+import com.matheusvargas481.analisededados.config.GerenciaDiretorioConfig;
 import com.matheusvargas481.analisededados.domain.DadoFinalParaEscritaNoArquivo;
 import com.matheusvargas481.analisededados.domain.DadoProcessado;
-import com.matheusvargas481.analisededados.exception.ErroAoEscreverArquivoException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import com.matheusvargas481.analisededados.exception.ErroNaCriacaoDoArquivoException;
+import com.matheusvargas481.analisededados.exception.ErroNaEscritaDoArquivoException;
+import com.matheusvargas481.analisededados.exception.ErroAoLerArquivoException;
+import org.springframework.stereotype.Service;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
-@Component
-public class EscreveArquivo {
-    @Autowired
-    private DadoProcessado dadoProcessado;
+@Service
+public class ArquivoService {
 
-    public void escreverNoArquivo() {
+    public void escreverNoArquivo(DadoProcessado dadoProcessado) {
+        final DadoFinalParaEscritaNoArquivo dadoFinalParaEscritaNoArquivo = new DadoFinalParaEscritaNoArquivo();
 
-        DadoFinalParaEscritaNoArquivo dadoFinalParaEscritaNoArquivo = new DadoFinalParaEscritaNoArquivo();
         dadoFinalParaEscritaNoArquivo.setQuantidadeDeCliente(dadoProcessado.buscarQuantidadeDeClientes());
         dadoFinalParaEscritaNoArquivo.setQuantidadeDeVendedor(dadoProcessado.buscarQuantidadeDeVendedores());
         dadoFinalParaEscritaNoArquivo.setIdDaVendaDeMaiorValor(dadoProcessado.buscarIdDaVendaDeMaiorValor());
@@ -39,13 +38,34 @@ public class EscreveArquivo {
             bufferedWriter.close();
 
         } catch (IOException e) {
-            throw new ErroAoEscreverArquivoException(e.getMessage());
+            throw new ErroNaEscritaDoArquivoException(e.getMessage());
         }
+    }
+
+    public List<String> lerLinhasDoArquivo() {
+        File dir = new File(GerenciaDiretorioConfig.DIRETORIO_DE_ENTRADA);
+        String linha;
+        List<String> linhas = new ArrayList<>();
+        try {
+            for (File file : dir.listFiles()) {
+
+                BufferedReader bufferedReader = Files.newBufferedReader(file.toPath());
+
+                while ((linha = bufferedReader.readLine()) != null) {
+                    linhas.add(linha);
+                }
+
+                bufferedReader.close();
+            }
+        } catch (IOException e) {
+            throw new ErroAoLerArquivoException();
+        }
+        return linhas;
     }
 
     private File criarArquivo() {
         try {
-            String diretorioFinal = GerenciaDiretorio.DIRETORIO_DE_SAIDA + "/out." + GerenciaDiretorio.EXTENSAO_ARQUIVO;
+            String diretorioFinal = GerenciaDiretorioConfig.DIRETORIO_DE_SAIDA + "/out." + GerenciaDiretorioConfig.EXTENSAO_ARQUIVO;
 
             File arquivo = new File(diretorioFinal);
 
@@ -58,7 +78,7 @@ public class EscreveArquivo {
             return arquivo;
 
         } catch (IOException | NoSuchElementException e) {
-            throw new ErroAoEscreverArquivoException(e.getMessage());
+            throw new ErroNaCriacaoDoArquivoException(e.getMessage());
         }
     }
 
