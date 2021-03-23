@@ -3,9 +3,9 @@ package com.matheusvargas481.analisededados.service.arquivo;
 import com.matheusvargas481.analisededados.config.GerenciaDiretorioConfig;
 import com.matheusvargas481.analisededados.domain.DadoFinalParaEscritaNoArquivo;
 import com.matheusvargas481.analisededados.domain.DadoProcessado;
+import com.matheusvargas481.analisededados.exception.ErroAoLerArquivoException;
 import com.matheusvargas481.analisededados.exception.ErroNaCriacaoDoArquivoException;
 import com.matheusvargas481.analisededados.exception.ErroNaEscritaDoArquivoException;
-import com.matheusvargas481.analisededados.exception.ErroAoLerArquivoException;
 import org.springframework.stereotype.Service;
 
 import java.io.*;

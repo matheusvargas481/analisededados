@@ -1,7 +1,5 @@
 package com.matheusvargas481.analisededados.domain;
 
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;

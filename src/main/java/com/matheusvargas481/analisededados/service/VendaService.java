@@ -68,7 +68,7 @@ public class VendaService extends Separador {
                     itemDeVenda.setQuantidade(Integer.parseInt(itemDeVendaSeparado[1]));
                     itemDeVenda.setPreco(Double.parseDouble(itemDeVendaSeparado[2]));
                     itensDeVendas.add(itemDeVenda);
-                }else {
+                } else {
                     throw new LayoutDoItemDeVendaDiferenteDoEsperadoException();
                 }
             } catch (LayoutDoItemDeVendaDiferenteDoEsperadoException e) {

@@ -57,7 +57,7 @@ public class EscutaDiretorioService {
         }
     }
 
-    private void criarChaveDeObservacaoDoDiretorio()  {
+    private void criarChaveDeObservacaoDoDiretorio() {
         while (true) {
             try {
                 if (!((key = watchService.take()) != null)) break;
