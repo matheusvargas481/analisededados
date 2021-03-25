@@ -1,8 +1,9 @@
 package com.matheusvargas481.analisededados.service;
 
+import com.matheusvargas481.analisededados.domain.DadoProcessado;
 import com.matheusvargas481.analisededados.domain.Vendedor;
 import org.junit.After;
-import org.junit.Before;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -27,126 +23,80 @@ public class VendedorServiceTest {
     @MockBean
     private Logger logger;
 
-    private List<Vendedor> vendedores;
-
-    @Before
-    public void init() {
-        logger.info("startup");
-        vendedores = new ArrayList<>();
-    }
+    private DadoProcessado dadoProcessado = new DadoProcessado();
 
     @After
     public void teardown() {
         logger.info("teardown");
-        vendedores.clear();
+        dadoProcessado = new DadoProcessado();
     }
 
     @Test
-    public void testProcessarLinhasComVendedores() {
-        vendedores = vendedorService.processarLinhasComVendedores(getLinhasDoArquivo());
-        assertEquals(getVendedores(), vendedores);
+    public void testProcessarLinhaDeVendedor() {
+        vendedorService.montarObjeto(getLinhaDeVendedor(), dadoProcessado);
+        Assert.assertEquals(getVendedor(), dadoProcessado.getVendedores().get(0));
     }
 
     @Test
-    public void testArquivoVazio() {
-        vendedores = vendedorService.processarLinhasComVendedores(getArquivoVazio());
-        assertEquals(Collections.EMPTY_LIST, vendedores);
+    public void testProcessarLinhaDeVendedorVazia() {
+        vendedorService.montarObjeto(getLinhaDeVendedorVazia(), dadoProcessado);
+        assertTrue(dadoProcessado.getVendedores().isEmpty());
     }
 
     @Test
-    public void testArquivoValidoESemLinhasDeVendedor() {
-        vendedores = vendedorService.processarLinhasComVendedores(getLinhasDoArquivoSemVendedores());
-        assertEquals(Collections.EMPTY_LIST, vendedores);
+    public void testProcessarLinhaDeVendedorComSeparadorDiferente() {
+        vendedorService.montarObjeto(getLinhaDeVendedorComOutroSeparador(), dadoProcessado);
+        Assert.assertEquals(getVendedor(), dadoProcessado.getVendedores().get(0));
     }
 
     @Test
-    public void testComSeparadorDiferente() {
-        vendedores = vendedorService.processarLinhasComVendedores(getLinhasDeVendedorComOutroSeparador());
-        assertEquals(getVendedores(), vendedores);
+    public void testProcessarLinhaDeVendedorContendoCedilhaNoNome() {
+        vendedorService.montarObjeto(getLinhaDeVendedorContendoCedilhaNoNome(), dadoProcessado);
+        Assert.assertEquals(getVendedorContendoCedilhaNoNome(), dadoProcessado.getVendedores().get(0));
     }
 
     @Test
-    public void testNomeComCedilha() {
-        vendedores = vendedorService.processarLinhasComVendedores(getLinhasDeVendedoresContendoCedilhaNoNome());
-        assertEquals(getVendedoresComCedilha(), vendedores);
+    public void testProcessarLinhaDeVendedorComColunasIncompletas() {
+        vendedorService.montarObjeto(getLinhaDeVendedorComColunasIncompletas(), dadoProcessado);
+        assertTrue(dadoProcessado.getVendedores().isEmpty());
     }
 
     @Test
-    public void testColunasIncompletas() {
-        vendedores = vendedorService.processarLinhasComVendedores(getLinhasDeVendedorComCamposIncompletos());
-        assertEquals(getVendedoresComDadosFaltando(), vendedores);
-    }
-
-    @Test
-    public void testVendedorContendoLetrasNoSalario() {
-        vendedores = vendedorService.processarLinhasComVendedores(getLinhasDeVendedoresComLetrasNoSalario());
-        assertEquals(getVendedores(), vendedores);
+    public void testProcessarLinhaDeVendedorComLetraNoSalario() {
+        vendedorService.montarObjeto(getLinhaDeVendedorComLetraNoSalario(), dadoProcessado);
+        Assert.assertEquals(getVendedor(), dadoProcessado.getVendedores().get(0));
     }
 
 
-
-    private List<String> getLinhasDoArquivo() {
-        return Arrays.asList(
-                "001ç1234567891234çDiegoç50000",
-                "001ç3245678865434çRenatoç40000.99",
-                "002ç2345675434544345çJose da SilvaçRural",
-                "002ç2345675433444345çEduardo PereiraçRural",
-                "003ç10ç[1-10-100,2-30-2.50,3-40-3.10]çDiego",
-                "003ç08ç[1-34-10,2-33-1.50,3-40-0.10]çRenato");
+    private String getLinhaDeVendedor() {
+        return "001ç1234567891234çDiegoç50000";
     }
 
-    private List<String> getLinhasDeVendedoresComLetrasNoSalario() {
-        return Arrays.asList(
-                "001ç1234567891234çDiegoç50000Y",
-                "001ç3245678865434çRenatoç40000.99D");
+    private Vendedor getVendedor() {
+        return new Vendedor("1234567891234", "Diego", Double.parseDouble("50000"));
     }
 
-
-    private List<String> getLinhasDeVendedorComOutroSeparador() {
-        return Arrays.asList(
-                "001;1234567891234;Diego;50000",
-                "001;3245678865434;Renato;40000.99");
+    private String getLinhaDeVendedorVazia() {
+        return "";
     }
 
-    private List<String> getLinhasDeVendedorComCamposIncompletos() {
-        return Arrays.asList(
-                "001ççDiegoç50000",
-                "001ç3245678865434çRenatoç",
-                "001ç1234567891234çJuniorç50000");
+    private String getLinhaDeVendedorComOutroSeparador() {
+        return "001;1234567891234;Diego;50000";
     }
 
-    private List<String> getLinhasDoArquivoSemVendedores() {
-        return Arrays.asList(
-                "002ç2345675434544345çJose da SilvaçRural",
-                "002ç2345675433444345çEduardo PereiraçRural",
-                "003ç10ç[1-10-100,2-30-2.50,3-40-3.10]çDiego",
-                "003ç08ç[1-34-10,2-33-1.50,3-40-0.10]çRenato");
+    private String getLinhaDeVendedorContendoCedilhaNoNome() {
+        return "001ç1234567891234çAssunçãoç50000";
     }
 
-    private List<String> getArquivoVazio() {
-        return Arrays.asList("");
+    private Vendedor getVendedorContendoCedilhaNoNome() {
+        return new Vendedor("1234567891234", "Assunção", Double.parseDouble("50000"));
     }
 
-    private List<Vendedor> getVendedores() {
-        Vendedor vendedorEsperadoUm = new Vendedor("1234567891234", "Diego", Double.parseDouble("50000"));
-        Vendedor vendedorEsperadoDois = new Vendedor("3245678865434", "Renato", Double.parseDouble("40000.99"));
-        return Arrays.asList(vendedorEsperadoUm, vendedorEsperadoDois);
+    private String getLinhaDeVendedorComColunasIncompletas() {
+        return "001ç1234567891234çç50000";
     }
 
-    private List<String> getLinhasDeVendedoresContendoCedilhaNoNome() {
-        return Arrays.asList(
-                "001ç1234567891234çAssunçãoç50000",
-                "001ç3245678865434çConceiçãoç40000.99");
-    }
-
-    private List<Vendedor> getVendedoresComCedilha() {
-        Vendedor vendedorEsperadoUm = new Vendedor("1234567891234", "Assunção", Double.parseDouble("50000"));
-        Vendedor vendedorEsperadoDois = new Vendedor("3245678865434", "Conceição", Double.parseDouble("40000.99"));
-        return Arrays.asList(vendedorEsperadoUm, vendedorEsperadoDois);
-    }
-
-    private List<Vendedor> getVendedoresComDadosFaltando() {
-        Vendedor vendedorEsperado = new Vendedor("1234567891234", "Junior", Double.parseDouble("50000"));
-        return Arrays.asList(vendedorEsperado);
+    private String getLinhaDeVendedorComLetraNoSalario() {
+        return "001ç1234567891234çDiegoç50L000Y";
     }
 }

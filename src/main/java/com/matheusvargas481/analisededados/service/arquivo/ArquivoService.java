@@ -6,18 +6,38 @@ import com.matheusvargas481.analisededados.domain.DadoProcessado;
 import com.matheusvargas481.analisededados.exception.ErroAoLerArquivoException;
 import com.matheusvargas481.analisededados.exception.ErroNaCriacaoDoArquivoException;
 import com.matheusvargas481.analisededados.exception.ErroNaEscritaDoArquivoException;
+import com.matheusvargas481.analisededados.service.ProcessaArquivoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.file.Paths;
 import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 
 @Service
 public class ArquivoService {
+    @Autowired
+    private ProcessaArquivoService processaArquivoService;
 
-    public void escreverNoArquivo(DadoProcessado dadoProcessado) {
+    public void lerLinhasDeTodosArquivosDoDiretorioObservado() {
+        DadoProcessado dadoProcessado = new DadoProcessado();
+        try (Stream<String> lines =
+                     (Files.newBufferedReader(Paths.get(GerenciaDiretorioConfig.DIRETORIO_DE_ENTRADA))
+                             .lines())) {
+            lines.forEach(linha -> processaArquivoService.processarArquivos(linha, dadoProcessado));
+            lines.close();
+            escreverNoArquivo(dadoProcessado);
+        } catch (IOException ioException) {
+            throw new ErroAoLerArquivoException(ioException.getMessage());
+        }
+    }
+
+    private void escreverNoArquivo(DadoProcessado dadoProcessado) {
         final DadoFinalParaEscritaNoArquivo dadoFinalParaEscritaNoArquivo = new DadoFinalParaEscritaNoArquivo();
 
         dadoFinalParaEscritaNoArquivo.setQuantidadeDeCliente(dadoProcessado.buscarQuantidadeDeClientes());
@@ -40,27 +60,6 @@ public class ArquivoService {
         } catch (IOException e) {
             throw new ErroNaEscritaDoArquivoException(e.getMessage());
         }
-    }
-
-    public List<String> lerLinhasDoArquivo() {
-        File dir = new File(GerenciaDiretorioConfig.DIRETORIO_DE_ENTRADA);
-        String linha;
-        List<String> linhas = new ArrayList<>();
-        try {
-            for (File file : dir.listFiles()) {
-
-                BufferedReader bufferedReader = Files.newBufferedReader(file.toPath());
-
-                while ((linha = bufferedReader.readLine()) != null) {
-                    linhas.add(linha);
-                }
-
-                bufferedReader.close();
-            }
-        } catch (IOException e) {
-            throw new ErroAoLerArquivoException();
-        }
-        return linhas;
     }
 
     private File criarArquivo() {

@@ -10,30 +10,33 @@ public class DadoProcessado {
     private List<Vendedor> vendedores = new ArrayList<>();
     private List<Venda> vendas = new ArrayList<>();
 
+    public DadoProcessado addVenda(Venda venda) {
+        this.vendas.add(venda);
+        return this;
+    }
+
+    public DadoProcessado addCliente(Cliente cliente) {
+        this.clientes.add(cliente);
+        return this;
+    }
+
+    public DadoProcessado addVendedor(Vendedor vendedor) {
+        this.vendedores.add(vendedor);
+        return this;
+    }
 
     public List<Cliente> getClientes() {
         return clientes;
-    }
-
-    public void setClientes(List<Cliente> clientes) {
-        this.clientes = clientes;
     }
 
     public List<Vendedor> getVendedores() {
         return vendedores;
     }
 
-    public void setVendedores(List<Vendedor> vendedores) {
-        this.vendedores = vendedores;
-    }
-
     public List<Venda> getVendas() {
         return vendas;
     }
 
-    public void setVendas(List<Venda> vendas) {
-        this.vendas = vendas;
-    }
 
     public int buscarQuantidadeDeClientes() {
         if (clientes.isEmpty()) return 0;

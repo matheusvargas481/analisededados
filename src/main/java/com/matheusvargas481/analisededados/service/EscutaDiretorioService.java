@@ -1,7 +1,7 @@
 package com.matheusvargas481.analisededados.service;
 
 import com.matheusvargas481.analisededados.config.GerenciaDiretorioConfig;
-import com.matheusvargas481.analisededados.domain.DadoProcessado;
+import com.matheusvargas481.analisededados.service.arquivo.ArquivoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +16,9 @@ import java.nio.file.*;
 public class EscutaDiretorioService {
     private static Logger LOGGER = LoggerFactory.getLogger(EscutaDiretorioService.class);
     @Autowired
-    private GerenciaDiretorioConfig gerenciaDiretorioConfig;
+    private ArquivoService arquivoService;
     @Autowired
-    private ProcessaDadoService processaDadoService;
+    private GerenciaDiretorioConfig gerenciaDiretorioConfig;
     @Autowired
     private Environment env;
 
@@ -64,9 +64,7 @@ public class EscutaDiretorioService {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            new DadoProcessado();
-            processaDadoService.processarArquivos();
-
+            arquivoService.lerLinhasDeTodosArquivosDoDiretorioObservado();
             for (WatchEvent<?> event : key.pollEvents()) {
                 LOGGER.info("Tipo de mudança :" + event.kind()
                         + ". Arquivo afetado: " + event.context() + ".");

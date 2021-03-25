@@ -42,7 +42,7 @@ public class Venda {
         this.nome = nome;
     }
 
-    public double valorTotalDaVenda() {
+    public Double valorTotalDaVenda() {
         return itensDeVendas.stream().mapToDouble(itemDeVenda -> itemDeVenda.getQuantidade() * itemDeVenda.getPreco()).sum();
     }
 

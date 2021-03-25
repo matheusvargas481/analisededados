@@ -3,7 +3,7 @@ package com.matheusvargas481.analisededados.config;
 import com.matheusvargas481.analisededados.exception.ErroNaCriacaoDoDiretorioException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.NoSuchElementException;
 
-@Component
+@Configuration
 public class GerenciaDiretorioConfig {
 
     public static final String DIRETORIO_RAIZ = System.getProperty("user.home");
