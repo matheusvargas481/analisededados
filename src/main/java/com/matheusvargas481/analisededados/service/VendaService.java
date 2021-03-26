@@ -30,10 +30,11 @@ public class VendaService extends Separador implements ProcessaLinhaStrategy {
 
         try {
             if (vendaSemSeparador.length == 4) {
-                Venda venda = new Venda();
-                venda.setId(Long.parseLong(vendaSemSeparador[1]));
-                venda.setItensDeVendas(montaListaDeItemDeVenda(vendaSemSeparador[2]));
-                venda.setNome(vendaSemSeparador[3]);
+                Venda venda = new Venda($ -> {
+                    $.setId(Long.parseLong(vendaSemSeparador[1]));
+                    $.setItensDeVendas(montaListaDeItemDeVenda(vendaSemSeparador[2]));
+                    $.setNome(vendaSemSeparador[3]);
+                });
                 dadoProcessado.addVenda(venda);
             } else
                 throw new LayoutDeVendaDiferenteDoEsperadoException();

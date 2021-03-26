@@ -19,24 +19,25 @@ public class VendedorService extends Separador implements ProcessaLinhaStrategy 
     @Override
     public void processarLinha(String linhaDeVendedor, DadoProcessado dadoProcessado) {
 
-            String[] vendedorSemSeparador = separarLinhaParaMontarObjeto(linhaDeVendedor);
+        String[] vendedorSemSeparador = separarLinhaParaMontarObjeto(linhaDeVendedor);
 
-            try {
-                if (vendedorSemSeparador.length == 4) {
-                    Vendedor vendedor = new Vendedor();
-                    vendedor.setCpf(vendedorSemSeparador[1]);
-                    vendedor.setNome(vendedorSemSeparador[2]);
-                    vendedor.setSalario(Double.parseDouble(removerLetrasDoSalario(vendedorSemSeparador[3])));
-                    dadoProcessado.addVendedor(vendedor);
-                } else
-                    throw new LayoutDeVendedorDiferenteDoEsperadoException();
+        try {
+            if (vendedorSemSeparador.length == 4) {
+                Vendedor vendedor = new Vendedor($ -> {
+                    $.setCpf(vendedorSemSeparador[1]);
+                    $.setNome(vendedorSemSeparador[2]);
+                    $.setSalario(Double.parseDouble(removerLetrasDoSalario(vendedorSemSeparador[3])));
+                });
+                dadoProcessado.addVendedor(vendedor);
+            } else
+                throw new LayoutDeVendedorDiferenteDoEsperadoException();
 
-            } catch (LayoutDeVendedorDiferenteDoEsperadoException e) {
-                LOGGER.error(MENSAGEM_DE_ERRO_NO_LAYOUT_DO_VENDEDOR, linhaDeVendedor, e.getCause());
-            } catch (NumberFormatException n) {
-                LOGGER.error(MENSAGEM_DE_ERRO_NO_PARSE_DO_SALARIO_DO_VENDEDOR, linhaDeVendedor, n.getCause());
-            }
+        } catch (LayoutDeVendedorDiferenteDoEsperadoException e) {
+            LOGGER.error(MENSAGEM_DE_ERRO_NO_LAYOUT_DO_VENDEDOR, linhaDeVendedor, e.getCause());
+        } catch (NumberFormatException n) {
+            LOGGER.error(MENSAGEM_DE_ERRO_NO_PARSE_DO_SALARIO_DO_VENDEDOR, linhaDeVendedor, n.getCause());
         }
+    }
 
     private String removerLetrasDoSalario(String salario) {
         return salario.replaceAll(REGEX_RETIRA_LETRAS_CAMPO_SALARIO, "");

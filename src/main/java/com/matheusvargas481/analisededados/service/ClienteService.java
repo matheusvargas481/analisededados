@@ -21,12 +21,12 @@ public class ClienteService extends Separador implements ProcessaLinhaStrategy {
 
         try {
             if (clienteSemSeparador.length == 4) {
-                Cliente cliente = new Cliente();
-                cliente.setCnpj(clienteSemSeparador[1]);
-                cliente.setNome(clienteSemSeparador[2]);
-                cliente.setAreaDeNegocio(clienteSemSeparador[3]);
+                Cliente cliente = new Cliente($ -> {
+                    $.setCnpj(clienteSemSeparador[1]);
+                    $.setNome(clienteSemSeparador[2]);
+                    $.setAreaDeNegocio(clienteSemSeparador[3]);
+                });
                 dadoProcessado.addCliente(cliente);
-
             } else
                 throw new LayoutDoClienteDiferenteDoEsperadoException();
 

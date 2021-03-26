@@ -37,12 +37,6 @@ public class ClienteServiceTest {
     }
 
     @Test
-    public void testProcessarLinhaDeClienteVazia() {
-        clienteService.processarLinha(getLinhaDeClienteVazia(), dadoProcessado);
-        assertTrue(dadoProcessado.getClientes().isEmpty());
-    }
-
-    @Test
     public void testProcessarLinhaDeClienteComSeparadorDiferente() {
         clienteService.processarLinha(getLinhaDeClienteComOutroSeparador(), dadoProcessado);
         assertEquals(getCliente(), dadoProcessado.getClientes().get(0));
@@ -66,13 +60,13 @@ public class ClienteServiceTest {
     }
 
     private Cliente getCliente() {
-        return new Cliente("2345675433444345", "Eduardo Pereira", "Rural");
-    }
+        return new Cliente($ -> {
+            $.setCnpj("2345675433444345");
+            $.setNome("Eduardo Pereira");
+            $.setAreaDeNegocio("Rural");
+        });
 
-    private String getLinhaDeClienteVazia() {
-        return "";
     }
-
 
     private String getLinhaDeClienteComOutroSeparador() {
         return "002;2345675433444345;Eduardo Pereira;Rural";
@@ -87,7 +81,11 @@ public class ClienteServiceTest {
     }
 
     private Cliente getClienteContendoCedilhaNoNome() {
-        return new Cliente("2345675433444345", "Conceição", "Rural");
+        return new Cliente($ -> {
+            $.setCnpj("2345675433444345");
+            $.setNome("Conceição");
+            $.setAreaDeNegocio("Rural");
+        });
     }
 
 }

@@ -2,9 +2,9 @@ package com.matheusvargas481.analisededados.domain;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public class Venda {
-    public static final String COMECA_COM_003 = "003";
     private Long id;
     private List<ItemDeVenda> itensDeVendas;
     private String nome;
@@ -12,10 +12,8 @@ public class Venda {
     public Venda() {
     }
 
-    public Venda(Long id, List<ItemDeVenda> itensDeVendas, String nome) {
-        this.id = id;
-        this.itensDeVendas = itensDeVendas;
-        this.nome = nome;
+    public Venda(Consumer<Venda> venda) {
+        venda.accept(this);
     }
 
     public Long getId() {

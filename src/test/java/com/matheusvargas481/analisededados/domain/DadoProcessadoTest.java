@@ -43,23 +43,10 @@ public class DadoProcessadoTest {
     }
 
     @Test
-    public void testBuscarQuantidadeDeClienteLinhaArquivoVazia() {
-        clienteService.processarLinha(getArquivoVazio(), dadoProcessado);
-        assertEquals(0, dadoProcessado.buscarQuantidadeDeClientes());
-    }
-
-    @Test
     public void testBuscarQuantidadeDeVendedoresNoArquivo() {
         vendedorService.processarLinha(getLinhaDeVendedor(), dadoProcessado);
         assertEquals(1, dadoProcessado.buscarQuantidadeDeVendedores());
     }
-
-    @Test
-    public void testBuscarQuantidadeDeVendedoresLinhaVazia() {
-        vendedorService.processarLinha(getArquivoVazio(), dadoProcessado);
-        assertEquals(0, dadoProcessado.buscarQuantidadeDeVendedores());
-    }
-
 
     @Test
     public void testBuscarIdDaVendaDeMaiorValor() {
@@ -68,30 +55,13 @@ public class DadoProcessadoTest {
     }
 
     @Test
-    public void testBuscarIdDaVendaDeMaiorValorComLinhaVazia() {
-        vendaService.processarLinha(getArquivoVazio(), dadoProcessado);
-        assertEquals(0L, dadoProcessado.buscarIdDaVendaDeMaiorValor());
-    }
-
-    @Test
     public void testBuscarPiorVendedor() {
         vendaService.processarLinha(getLinhaDeVenda(), dadoProcessado);
         assertEquals("Diego", dadoProcessado.buscarPiorVendedor());
     }
 
-    @Test
-    public void testBuscarPiorVendedorComLinhaVazia() {
-        vendaService.processarLinha(getArquivoVazio(), dadoProcessado);
-        assertEquals("", dadoProcessado.buscarPiorVendedor());
-    }
-
-
     private String getLinhaDeCliente() {
         return "002ç2345675433444345çEduardo PereiraçRural";
-    }
-
-    private String getArquivoVazio() {
-        return "";
     }
 
     private String getLinhaDeVendedor() {

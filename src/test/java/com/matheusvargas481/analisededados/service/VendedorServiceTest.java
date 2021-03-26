@@ -38,12 +38,6 @@ public class VendedorServiceTest {
     }
 
     @Test
-    public void testProcessarLinhaDeVendedorVazia() {
-        vendedorService.processarLinha(getLinhaDeVendedorVazia(), dadoProcessado);
-        assertTrue(dadoProcessado.getVendedores().isEmpty());
-    }
-
-    @Test
     public void testProcessarLinhaDeVendedorComSeparadorDiferente() {
         vendedorService.processarLinha(getLinhaDeVendedorComOutroSeparador(), dadoProcessado);
         Assert.assertEquals(getVendedor(), dadoProcessado.getVendedores().get(0));
@@ -73,11 +67,11 @@ public class VendedorServiceTest {
     }
 
     private Vendedor getVendedor() {
-        return new Vendedor("1234567891234", "Diego", Double.parseDouble("50000"));
-    }
-
-    private String getLinhaDeVendedorVazia() {
-        return "";
+        return new Vendedor($ -> {
+            $.setCpf("1234567891234");
+            $.setNome("Diego");
+            $.setSalario(Double.parseDouble("50000"));
+        });
     }
 
     private String getLinhaDeVendedorComOutroSeparador() {
@@ -89,7 +83,11 @@ public class VendedorServiceTest {
     }
 
     private Vendedor getVendedorContendoCedilhaNoNome() {
-        return new Vendedor("1234567891234", "Assunção", Double.parseDouble("50000"));
+        return new Vendedor($ -> {
+            $.setCpf("1234567891234");
+            $.setNome("Assunção");
+            $.setSalario(Double.parseDouble("50000"));
+        });
     }
 
     private String getLinhaDeVendedorComColunasIncompletas() {

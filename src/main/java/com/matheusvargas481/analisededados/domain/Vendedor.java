@@ -1,9 +1,9 @@
 package com.matheusvargas481.analisededados.domain;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public class Vendedor {
-    public static final String COMECA_COM_001 = "001";
     private String cpf;
     private String nome;
     private double salario;
@@ -11,10 +11,8 @@ public class Vendedor {
     public Vendedor() {
     }
 
-    public Vendedor(String cpf, String nome, double salario) {
-        this.cpf = cpf;
-        this.nome = nome;
-        this.salario = salario;
+    public Vendedor(Consumer<Vendedor> vendedor) {
+        vendedor.accept(this);
     }
 
     public String getCpf() {

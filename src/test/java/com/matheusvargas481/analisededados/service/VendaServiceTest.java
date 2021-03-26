@@ -13,8 +13,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
@@ -42,12 +40,6 @@ public class VendaServiceTest {
     public void testProcessarLinhaDeVenda() {
         vendaService.processarLinha(getLinhaDeVenda(), dadoProcessado);
         Assert.assertEquals(getVenda(), dadoProcessado.getVendas().get(0));
-    }
-
-    @Test
-    public void testProcessarLinhaDeVendaVazia() {
-        vendaService.processarLinha(getLinhaDeVendaVazia(), dadoProcessado);
-        assertTrue(dadoProcessado.getVendas().isEmpty());
     }
 
     @Test
@@ -80,17 +72,16 @@ public class VendaServiceTest {
     }
 
     private Venda getVenda() {
-        return new Venda(10L, Arrays.asList(
-                new ItemDeVenda(1L, 10, 100D),
-                new ItemDeVenda(2L, 30, 2.50),
-                new ItemDeVenda(3L, 40, 3.10)),
-                "Diego");
-    }
+        return new Venda($ -> {
+            $.setId(10L);
+            $.setItensDeVendas(Arrays.asList(
+                    new ItemDeVenda(1L, 10, 100D),
+                    new ItemDeVenda(2L, 30, 2.50),
+                    new ItemDeVenda(3L, 40, 3.10)));
+            $.setNome("Diego");
+        });
 
-    private String getLinhaDeVendaVazia() {
-        return "";
     }
-
 
     private String getLinhaDeVendaComOutroSeparador() {
         return "003;10;[1-10-100,2-30-2.50,3-40-3.10];Diego";
@@ -101,11 +92,14 @@ public class VendaServiceTest {
     }
 
     private Venda getVendaContendoCedilhaNoNomeDoVendedor() {
-        return new Venda(10L, Arrays.asList(
-                new ItemDeVenda(1L, 10, 100D),
-                new ItemDeVenda(2L, 30, 2.50),
-                new ItemDeVenda(3L, 40, 3.10)),
-                "Assunção");
+        return new Venda($ -> {
+            $.setId(10L);
+            $.setItensDeVendas(Arrays.asList(
+                    new ItemDeVenda(1L, 10, 100D),
+                    new ItemDeVenda(2L, 30, 2.50),
+                    new ItemDeVenda(3L, 40, 3.10)));
+            $.setNome("Assunção");
+        });
 
     }
 
@@ -115,45 +109,5 @@ public class VendaServiceTest {
 
     private String getLinhaDeVendaContendoDivergenciaNoItemDeVenda() {
         return "003ç10ç[1-8-10-100-50,2-30-2.-650,3-4-0-3.10]çDiego";
-    }
-
-
-    private List<String> getLinhasDoArquivoSemVendas() {
-        return Arrays.asList(
-                "001ç1234567891234çDiegoç50000",
-                "001ç3245678865434çRenatoç40000.99",
-                "002ç2345675434544345çJose da SilvaçRural",
-                "002ç2345675433444345çEduardo PereiraçRural");
-    }
-
-
-    private List<String> getLinhasDeVendaContendoDivergenciaNoItemDeVenda() {
-        return Arrays.asList(
-                "003ç10ç[1-8-10-100-50,2-30-2.-650,3-4-0-3.10]çDiego",
-                "003ç08ç[1-3-4-10,2-33-1.50-8-5,3-4-0-0.10]çRenato",
-                "003ç08ç[1-34-10,2-33-1.50,3-40-0.10]çRenato");
-    }
-
-
-    private List<Venda> getVendasComDadosFaltando() {
-        Venda vendaEsperada = new Venda(8L, Arrays.asList(
-                new ItemDeVenda(1L, 34, 10D),
-                new ItemDeVenda(2L, 33, 1.50),
-                new ItemDeVenda(3L, 40, 0.10)),
-                "Renato");
-
-        return Arrays.asList(vendaEsperada);
-    }
-
-    private List<Venda> getVendasComItensDeVendasComDivergencia() {
-        Venda vendaEsperadaUm = new Venda(10L, Collections.EMPTY_LIST, "Diego");
-        Venda vendaEsperadaDois = new Venda(8L, Collections.EMPTY_LIST, "Renato");
-        Venda vendaEsperadaTres = new Venda(8L, Arrays.asList(
-                new ItemDeVenda(1L, 34, 10D),
-                new ItemDeVenda(2L, 33, 1.50),
-                new ItemDeVenda(3L, 40, 0.10)),
-                "Renato");
-
-        return Arrays.asList(vendaEsperadaUm, vendaEsperadaDois, vendaEsperadaTres);
     }
 }

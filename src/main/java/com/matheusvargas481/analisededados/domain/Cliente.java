@@ -1,9 +1,9 @@
 package com.matheusvargas481.analisededados.domain;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public class Cliente {
-    public static final String COMECA_COM_002 = "002";
     private String cnpj;
     private String nome;
     private String areaDeNegocio;
@@ -11,10 +11,8 @@ public class Cliente {
     public Cliente() {
     }
 
-    public Cliente(String cnpj, String nome, String areaDeNegocio) {
-        this.cnpj = cnpj;
-        this.nome = nome;
-        this.areaDeNegocio = areaDeNegocio;
+    public Cliente(Consumer<Cliente> cliente) {
+        cliente.accept(this);
     }
 
     public String getCnpj() {
