@@ -7,9 +7,6 @@ public class ItemDeVenda {
     private int quantidade;
     private Double preco;
 
-    public ItemDeVenda() {
-    }
-
     public ItemDeVenda(Consumer<ItemDeVenda> itemDeVenda) {
         itemDeVenda.accept(this);
     }

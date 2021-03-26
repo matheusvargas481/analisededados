@@ -8,9 +8,6 @@ public class Vendedor {
     private String nome;
     private double salario;
 
-    public Vendedor() {
-    }
-
     public Vendedor(Consumer<Vendedor> vendedor) {
         vendedor.accept(this);
     }

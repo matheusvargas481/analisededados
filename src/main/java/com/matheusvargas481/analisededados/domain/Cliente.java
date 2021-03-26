@@ -8,9 +8,6 @@ public class Cliente {
     private String nome;
     private String areaDeNegocio;
 
-    public Cliente() {
-    }
-
     public Cliente(Consumer<Cliente> cliente) {
         cliente.accept(this);
     }

@@ -9,9 +9,6 @@ public class Venda {
     private List<ItemDeVenda> itensDeVendas;
     private String nome;
 
-    public Venda() {
-    }
-
     public Venda(Consumer<Venda> venda) {
         venda.accept(this);
     }
