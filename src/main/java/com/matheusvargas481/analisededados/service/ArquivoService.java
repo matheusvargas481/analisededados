@@ -30,7 +30,7 @@ public class ArquivoService {
             for (Path path : Files.newDirectoryStream(Paths.get(GerenciaDiretorioConfig.DIRETORIO_DE_ENTRADA),
                     path -> path.toFile().isFile())) {
                 try (Stream<String> linhas = Files.lines(Paths.get(path.normalize().toString()))) {
-                    linhas.forEach(linha -> processaLinhaService.processarArquivos(linha, dadoProcessado));
+                    linhas.forEach(linha -> processaLinhaService.processarLinha(linha, dadoProcessado));
                 }
             }
             escreverDadoProcessadoNoArquivo(dadoProcessado);

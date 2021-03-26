@@ -57,10 +57,11 @@ public class VendaService extends Separador implements ProcessaLinhaStrategy {
 
             try {
                 if (itemDeVendaSeparado.length == 3 && listaDeItens.length == 3) {
-                    ItemDeVenda itemDeVenda = new ItemDeVenda();
-                    itemDeVenda.setId(Long.parseLong(itemDeVendaSeparado[0]));
-                    itemDeVenda.setQuantidade(Integer.parseInt(itemDeVendaSeparado[1]));
-                    itemDeVenda.setPreco(Double.parseDouble(itemDeVendaSeparado[2]));
+                    ItemDeVenda itemDeVenda = new ItemDeVenda($ -> {
+                        $.setId(Long.parseLong(itemDeVendaSeparado[0]));
+                        $.setQuantidade(Integer.parseInt(itemDeVendaSeparado[1]));
+                        $.setPreco(Double.parseDouble(itemDeVendaSeparado[2]));
+                    });
                     itensDeVendas.add(itemDeVenda);
                 } else {
                     throw new LayoutDoItemDeVendaDiferenteDoEsperadoException();

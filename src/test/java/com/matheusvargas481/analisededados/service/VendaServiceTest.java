@@ -13,6 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
@@ -72,24 +73,25 @@ public class VendaServiceTest {
     }
 
     private Venda getVenda() {
+        List<ItemDeVenda> itemDeVendas = Arrays.asList(
+                new ItemDeVenda($ -> {
+                    $.setId(1L);
+                    $.setQuantidade(10);
+                    $.setPreco(100D);
+                }),
+                new ItemDeVenda($ -> {
+                    $.setId(2L);
+                    $.setQuantidade(30);
+                    $.setPreco(2.50);
+                }),
+                new ItemDeVenda($ -> {
+                    $.setId(3L);
+                    $.setQuantidade(40);
+                    $.setPreco(3.10);
+                }));
         return new Venda($ -> {
             $.setId(10L);
-            $.setItensDeVendas(Arrays.asList(
-                    new ItemDeVenda(itemUm -> {
-                        itemUm.setId(1L);
-                        itemUm.setQuantidade(10);
-                        itemUm.setPreco(100D);
-                    }),
-                    new ItemDeVenda(itemDois -> {
-                        itemDois.setId(2L);
-                        itemDois.setQuantidade(30);
-                        itemDois.setPreco(2.50);
-                    }),
-                    new ItemDeVenda(itemtres -> {
-                        itemtres.setId(3L);
-                        itemtres.setQuantidade(40);
-                        itemtres.setPreco(3.10);
-                    })));
+            $.setItensDeVendas(itemDeVendas);
             $.setNome("Diego");
         });
 
@@ -104,24 +106,25 @@ public class VendaServiceTest {
     }
 
     private Venda getVendaContendoCedilhaNoNomeDoVendedor() {
+        List<ItemDeVenda> itemDeVendas = Arrays.asList(
+                new ItemDeVenda($ -> {
+                    $.setId(1L);
+                    $.setQuantidade(10);
+                    $.setPreco(100D);
+                }),
+                new ItemDeVenda($ -> {
+                    $.setId(2L);
+                    $.setQuantidade(30);
+                    $.setPreco(2.50);
+                }),
+                new ItemDeVenda($ -> {
+                    $.setId(3L);
+                    $.setQuantidade(40);
+                    $.setPreco(3.10);
+                }));
         return new Venda($ -> {
             $.setId(10L);
-            $.setItensDeVendas(Arrays.asList(
-                    new ItemDeVenda(itemUm -> {
-                        itemUm.setId(1L);
-                        itemUm.setQuantidade(10);
-                        itemUm.setPreco(100D);
-                    }),
-                    new ItemDeVenda(itemDois -> {
-                        itemDois.setId(2L);
-                        itemDois.setQuantidade(30);
-                        itemDois.setPreco(2.50);
-                    }),
-                    new ItemDeVenda(itemtres -> {
-                        itemtres.setId(3L);
-                        itemtres.setQuantidade(40);
-                        itemtres.setPreco(3.10);
-                    })));
+            $.setItensDeVendas(itemDeVendas);
             $.setNome("Assunção");
         });
 

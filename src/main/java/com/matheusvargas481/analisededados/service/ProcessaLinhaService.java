@@ -13,7 +13,7 @@ public class ProcessaLinhaService {
     @Autowired
     private Map<String, ProcessaLinhaStrategy> strategyMap;
 
-    public void processarArquivos(String linhaArquivo, DadoProcessado dadoProcessado) {
+    public void processarLinha(String linhaArquivo, DadoProcessado dadoProcessado) {
         if (!linhaArquivo.isEmpty())
             strategyMap.get(linhaArquivo.substring(0, 3)).processarLinha(linhaArquivo, dadoProcessado);
     }
