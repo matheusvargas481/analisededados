@@ -32,31 +32,31 @@ public class ClienteServiceTest {
 
     @Test
     public void testProcessarLinhaDeCliente() {
-        clienteService.montarObjeto(getLinhaDeCliente(), dadoProcessado);
+        clienteService.processarLinha(getLinhaDeCliente(), dadoProcessado);
         assertEquals(getCliente(), dadoProcessado.getClientes().get(0));
     }
 
     @Test
     public void testProcessarLinhaDeClienteVazia() {
-        clienteService.montarObjeto(getLinhaDeClienteVazia(), dadoProcessado);
+        clienteService.processarLinha(getLinhaDeClienteVazia(), dadoProcessado);
         assertTrue(dadoProcessado.getClientes().isEmpty());
     }
 
     @Test
     public void testProcessarLinhaDeClienteComSeparadorDiferente() {
-        clienteService.montarObjeto(getLinhaDeClienteComOutroSeparador(), dadoProcessado);
+        clienteService.processarLinha(getLinhaDeClienteComOutroSeparador(), dadoProcessado);
         assertEquals(getCliente(), dadoProcessado.getClientes().get(0));
     }
 
     @Test
     public void testProcessarLinhaDeClienteContendoCedilhaNoNome() {
-        clienteService.montarObjeto(getLinhaDeClienteContendoCedilhaNoNome(), dadoProcessado);
+        clienteService.processarLinha(getLinhaDeClienteContendoCedilhaNoNome(), dadoProcessado);
         assertEquals(getClienteContendoCedilhaNoNome(), dadoProcessado.getClientes().get(0));
     }
 
     @Test
     public void testProcessarLinhaDeClienteComColunasIncompletas() {
-        clienteService.montarObjeto(getLinhaDeClienteComColunasIncompletas(), dadoProcessado);
+        clienteService.processarLinha(getLinhaDeClienteComColunasIncompletas(), dadoProcessado);
         assertTrue(dadoProcessado.getClientes().isEmpty());
     }
 

@@ -33,37 +33,37 @@ public class VendedorServiceTest {
 
     @Test
     public void testProcessarLinhaDeVendedor() {
-        vendedorService.montarObjeto(getLinhaDeVendedor(), dadoProcessado);
+        vendedorService.processarLinha(getLinhaDeVendedor(), dadoProcessado);
         Assert.assertEquals(getVendedor(), dadoProcessado.getVendedores().get(0));
     }
 
     @Test
     public void testProcessarLinhaDeVendedorVazia() {
-        vendedorService.montarObjeto(getLinhaDeVendedorVazia(), dadoProcessado);
+        vendedorService.processarLinha(getLinhaDeVendedorVazia(), dadoProcessado);
         assertTrue(dadoProcessado.getVendedores().isEmpty());
     }
 
     @Test
     public void testProcessarLinhaDeVendedorComSeparadorDiferente() {
-        vendedorService.montarObjeto(getLinhaDeVendedorComOutroSeparador(), dadoProcessado);
+        vendedorService.processarLinha(getLinhaDeVendedorComOutroSeparador(), dadoProcessado);
         Assert.assertEquals(getVendedor(), dadoProcessado.getVendedores().get(0));
     }
 
     @Test
     public void testProcessarLinhaDeVendedorContendoCedilhaNoNome() {
-        vendedorService.montarObjeto(getLinhaDeVendedorContendoCedilhaNoNome(), dadoProcessado);
+        vendedorService.processarLinha(getLinhaDeVendedorContendoCedilhaNoNome(), dadoProcessado);
         Assert.assertEquals(getVendedorContendoCedilhaNoNome(), dadoProcessado.getVendedores().get(0));
     }
 
     @Test
     public void testProcessarLinhaDeVendedorComColunasIncompletas() {
-        vendedorService.montarObjeto(getLinhaDeVendedorComColunasIncompletas(), dadoProcessado);
+        vendedorService.processarLinha(getLinhaDeVendedorComColunasIncompletas(), dadoProcessado);
         assertTrue(dadoProcessado.getVendedores().isEmpty());
     }
 
     @Test
     public void testProcessarLinhaDeVendedorComLetraNoSalario() {
-        vendedorService.montarObjeto(getLinhaDeVendedorComLetraNoSalario(), dadoProcessado);
+        vendedorService.processarLinha(getLinhaDeVendedorComLetraNoSalario(), dadoProcessado);
         Assert.assertEquals(getVendedor(), dadoProcessado.getVendedores().get(0));
     }
 

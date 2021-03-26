@@ -6,7 +6,7 @@ import com.matheusvargas481.analisededados.domain.ItemDeVenda;
 import com.matheusvargas481.analisededados.domain.Venda;
 import com.matheusvargas481.analisededados.exception.LayoutDeVendaDiferenteDoEsperadoException;
 import com.matheusvargas481.analisededados.exception.LayoutDoItemDeVendaDiferenteDoEsperadoException;
-import com.matheusvargas481.analisededados.strategy.MontaObjetoStrategy;
+import com.matheusvargas481.analisededados.strategy.ProcessaLinhaStrategy;
 import com.matheusvargas481.analisededados.util.Separador;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service(value = "003")
-public class VendaService extends Separador implements MontaObjetoStrategy {
+public class VendaService extends Separador implements ProcessaLinhaStrategy {
     private static Logger LOGGER = LoggerFactory.getLogger(VendaService.class);
 
     private static final String MENSAGEM_DE_ERRO_NO_LAYOUT_DA_VENDA = "Não foi possível montar o venda: {} pelo motivo: {}";
@@ -24,27 +24,24 @@ public class VendaService extends Separador implements MontaObjetoStrategy {
     private static final String MENSAGEM_DE_ERRO_NO_PARSE_DO_ITEM_DE_VENDA = "Não foi possível efetuar o parse do item de venda: {} por alguma inconsistência no layout.  Motivo: {}";
 
     @Override
-    public void montarObjeto(String linhaDeVenda, DadoProcessado dadoProcessado) {
-        if (!linhaDeVenda.isEmpty()) {
-            if (isLinhaDeVendaValido(linhaDeVenda)) {
-                String[] linhasDeVendasSemSeparador = separarLinhaParaMontarObjeto(linhaDeVenda);
+    public void processarLinha(String linhaDeVenda, DadoProcessado dadoProcessado) {
 
-                try {
-                    if (linhasDeVendasSemSeparador.length == 4) {
-                        Venda venda = new Venda();
-                        venda.setId(Long.parseLong(linhasDeVendasSemSeparador[1]));
-                        venda.setItensDeVendas(montaListaDeItemDeVenda(linhasDeVendasSemSeparador[2]));
-                        venda.setNome(linhasDeVendasSemSeparador[3]);
-                        dadoProcessado.addVenda(venda);
-                    } else
-                        throw new LayoutDeVendaDiferenteDoEsperadoException();
-                } catch (LayoutDeVendaDiferenteDoEsperadoException e) {
-                    LOGGER.error(MENSAGEM_DE_ERRO_NO_LAYOUT_DA_VENDA, linhaDeVenda, e.getCause());
-                }
-            }
+        String[] vendaSemSeparador = separarLinhaParaMontarObjeto(linhaDeVenda);
+
+        try {
+            if (vendaSemSeparador.length == 4) {
+                Venda venda = new Venda();
+                venda.setId(Long.parseLong(vendaSemSeparador[1]));
+                venda.setItensDeVendas(montaListaDeItemDeVenda(vendaSemSeparador[2]));
+                venda.setNome(vendaSemSeparador[3]);
+                dadoProcessado.addVenda(venda);
+            } else
+                throw new LayoutDeVendaDiferenteDoEsperadoException();
+        } catch (LayoutDeVendaDiferenteDoEsperadoException e) {
+            LOGGER.error(MENSAGEM_DE_ERRO_NO_LAYOUT_DA_VENDA, linhaDeVenda, e.getCause());
         }
-
     }
+
 
     private List<ItemDeVenda> montaListaDeItemDeVenda(String itensDaVenda) {
         List<ItemDeVenda> itensDeVendas = new ArrayList<>();
@@ -75,9 +72,4 @@ public class VendaService extends Separador implements MontaObjetoStrategy {
         }
         return itensDeVendas;
     }
-
-    private boolean isLinhaDeVendaValido(String linhaComCliente) {
-        return linhaComCliente.startsWith(Venda.COMECA_COM_003);
-    }
-
 }

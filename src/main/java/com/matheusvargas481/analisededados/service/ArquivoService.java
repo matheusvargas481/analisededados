@@ -1,12 +1,11 @@
-package com.matheusvargas481.analisededados.service.arquivo;
+package com.matheusvargas481.analisededados.service;
 
 import com.matheusvargas481.analisededados.config.GerenciaDiretorioConfig;
 import com.matheusvargas481.analisededados.domain.DadoFinalParaEscritaNoArquivo;
 import com.matheusvargas481.analisededados.domain.DadoProcessado;
-import com.matheusvargas481.analisededados.exception.ErroAoLerArquivoException;
+import com.matheusvargas481.analisededados.exception.ErroAoLerEProcessarLinhaArquivoException;
 import com.matheusvargas481.analisededados.exception.ErroNaCriacaoDoArquivoException;
 import com.matheusvargas481.analisededados.exception.ErroNaEscritaDoArquivoException;
-import com.matheusvargas481.analisededados.service.ProcessaArquivoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,23 +22,24 @@ import java.util.stream.Stream;
 @Service
 public class ArquivoService {
     @Autowired
-    private ProcessaArquivoService processaArquivoService;
+    private ProcessaLinhaService processaLinhaService;
 
-    public void lerLinhasDeTodosArquivosDoDiretorioObservado() {
-        DadoProcessado dadoProcessado = new DadoProcessado();
+    public void lerEprocessarLinhas() {
         try {
-            for (Path path : Files.newDirectoryStream(Paths.get(GerenciaDiretorioConfig.DIRETORIO_DE_ENTRADA))) {
+            DadoProcessado dadoProcessado = new DadoProcessado();
+            for (Path path : Files.newDirectoryStream(Paths.get(GerenciaDiretorioConfig.DIRETORIO_DE_ENTRADA),
+                    path -> path.toFile().isFile())) {
                 try (Stream<String> linhas = Files.lines(Paths.get(path.normalize().toString()))) {
-                    linhas.forEach(linha -> processaArquivoService.processarArquivos(linha, dadoProcessado));
+                    linhas.forEach(linha -> processaLinhaService.processarArquivos(linha, dadoProcessado));
                 }
             }
+            escreverDadoProcessadoNoArquivo(dadoProcessado);
         } catch (IOException e) {
-            throw new ErroAoLerArquivoException(e.getMessage());
+            throw new ErroAoLerEProcessarLinhaArquivoException(e.getMessage());
         }
-        escreverNoArquivo(dadoProcessado);
     }
 
-    private void escreverNoArquivo(DadoProcessado dadoProcessado) {
+    private void escreverDadoProcessadoNoArquivo(DadoProcessado dadoProcessado) {
         final DadoFinalParaEscritaNoArquivo dadoFinalParaEscritaNoArquivo = new DadoFinalParaEscritaNoArquivo();
 
         dadoFinalParaEscritaNoArquivo.setQuantidadeDeCliente(dadoProcessado.buscarQuantidadeDeClientes());

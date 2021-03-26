@@ -40,37 +40,37 @@ public class VendaServiceTest {
 
     @Test
     public void testProcessarLinhaDeVenda() {
-        vendaService.montarObjeto(getLinhaDeVenda(), dadoProcessado);
+        vendaService.processarLinha(getLinhaDeVenda(), dadoProcessado);
         Assert.assertEquals(getVenda(), dadoProcessado.getVendas().get(0));
     }
 
     @Test
     public void testProcessarLinhaDeVendaVazia() {
-        vendaService.montarObjeto(getLinhaDeVendaVazia(), dadoProcessado);
+        vendaService.processarLinha(getLinhaDeVendaVazia(), dadoProcessado);
         assertTrue(dadoProcessado.getVendas().isEmpty());
     }
 
     @Test
     public void testProcessarLinhaDeVendaComSeparadorDiferente() {
-        vendaService.montarObjeto(getLinhaDeVendaComOutroSeparador(), dadoProcessado);
+        vendaService.processarLinha(getLinhaDeVendaComOutroSeparador(), dadoProcessado);
         Assert.assertEquals(getVenda(), dadoProcessado.getVendas().get(0));
     }
 
     @Test
     public void testProcessarLinhaDeVendaContendoCedilhaNoNomeDoVendedor() {
-        vendaService.montarObjeto(getLinhaDeVendaContendoCedilhaNoNomeDoVendedor(), dadoProcessado);
+        vendaService.processarLinha(getLinhaDeVendaContendoCedilhaNoNomeDoVendedor(), dadoProcessado);
         Assert.assertEquals(getVendaContendoCedilhaNoNomeDoVendedor(), dadoProcessado.getVendas().get(0));
     }
 
     @Test
     public void testProcessarLinhaDeVendaComColunasIncompletas() {
-        vendaService.montarObjeto(getLinhaDeVendaComColunasIncompletas(), dadoProcessado);
+        vendaService.processarLinha(getLinhaDeVendaComColunasIncompletas(), dadoProcessado);
         assertTrue(dadoProcessado.getClientes().isEmpty());
     }
 
     @Test
     public void testMontarItemDeVendaColunasDivergentesDoEsperado() {
-        vendaService.montarObjeto(getLinhaDeVendaContendoDivergenciaNoItemDeVenda(), dadoProcessado);
+        vendaService.processarLinha(getLinhaDeVendaContendoDivergenciaNoItemDeVenda(), dadoProcessado);
         assertTrue(dadoProcessado.getVendas().get(0).getItensDeVendas().isEmpty());
     }
 

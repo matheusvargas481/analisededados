@@ -38,50 +38,50 @@ public class DadoProcessadoTest {
 
     @Test
     public void testBuscarQuantidadeDeClienteNoArquivo() {
-        clienteService.montarObjeto(getLinhaDeCliente(), dadoProcessado);
+        clienteService.processarLinha(getLinhaDeCliente(), dadoProcessado);
         assertEquals(1, dadoProcessado.buscarQuantidadeDeClientes());
     }
 
     @Test
     public void testBuscarQuantidadeDeClienteLinhaArquivoVazia() {
-        clienteService.montarObjeto(getArquivoVazio(), dadoProcessado);
+        clienteService.processarLinha(getArquivoVazio(), dadoProcessado);
         assertEquals(0, dadoProcessado.buscarQuantidadeDeClientes());
     }
 
     @Test
     public void testBuscarQuantidadeDeVendedoresNoArquivo() {
-        vendedorService.montarObjeto(getLinhaDeVendedor(), dadoProcessado);
+        vendedorService.processarLinha(getLinhaDeVendedor(), dadoProcessado);
         assertEquals(1, dadoProcessado.buscarQuantidadeDeVendedores());
     }
 
     @Test
     public void testBuscarQuantidadeDeVendedoresLinhaVazia() {
-        vendedorService.montarObjeto(getArquivoVazio(), dadoProcessado);
+        vendedorService.processarLinha(getArquivoVazio(), dadoProcessado);
         assertEquals(0, dadoProcessado.buscarQuantidadeDeVendedores());
     }
 
 
     @Test
     public void testBuscarIdDaVendaDeMaiorValor() {
-        vendaService.montarObjeto(getLinhaDeVenda(), dadoProcessado);
+        vendaService.processarLinha(getLinhaDeVenda(), dadoProcessado);
         assertEquals(10L, dadoProcessado.buscarIdDaVendaDeMaiorValor());
     }
 
     @Test
     public void testBuscarIdDaVendaDeMaiorValorComLinhaVazia() {
-        vendaService.montarObjeto(getArquivoVazio(), dadoProcessado);
+        vendaService.processarLinha(getArquivoVazio(), dadoProcessado);
         assertEquals(0L, dadoProcessado.buscarIdDaVendaDeMaiorValor());
     }
 
     @Test
     public void testBuscarPiorVendedor() {
-        vendaService.montarObjeto(getLinhaDeVenda(), dadoProcessado);
+        vendaService.processarLinha(getLinhaDeVenda(), dadoProcessado);
         assertEquals("Diego", dadoProcessado.buscarPiorVendedor());
     }
 
     @Test
     public void testBuscarPiorVendedorComLinhaVazia() {
-        vendaService.montarObjeto(getArquivoVazio(), dadoProcessado);
+        vendaService.processarLinha(getArquivoVazio(), dadoProcessado);
         assertEquals("", dadoProcessado.buscarPiorVendedor());
     }
 

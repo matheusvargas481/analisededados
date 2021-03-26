@@ -1,7 +1,6 @@
 package com.matheusvargas481.analisededados.service;
 
 import com.matheusvargas481.analisededados.config.GerenciaDiretorioConfig;
-import com.matheusvargas481.analisededados.service.arquivo.ArquivoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,17 +12,17 @@ import java.io.IOException;
 import java.nio.file.*;
 
 @Service
-public class EscutaDiretorioService {
-    private static Logger LOGGER = LoggerFactory.getLogger(EscutaDiretorioService.class);
+public class DiretorioService {
+    private static Logger LOGGER = LoggerFactory.getLogger(DiretorioService.class);
+    private static final String MENSAGEM_DE_TIPO_DE_ALTERACAO_NO_ARQUIVO_AFETADO = "Tipo de mudança : {}. Arquivo afetado: {}.";
+
     @Autowired
     private ArquivoService arquivoService;
     @Autowired
     private GerenciaDiretorioConfig gerenciaDiretorioConfig;
     @Autowired
     private Environment env;
-
     private WatchService watchService = null;
-
     private WatchKey key;
 
 
@@ -64,10 +63,9 @@ public class EscutaDiretorioService {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            arquivoService.lerLinhasDeTodosArquivosDoDiretorioObservado();
+            arquivoService.lerEprocessarLinhas();
             for (WatchEvent<?> event : key.pollEvents()) {
-                LOGGER.info("Tipo de mudança :" + event.kind()
-                        + ". Arquivo afetado: " + event.context() + ".");
+                LOGGER.info(MENSAGEM_DE_TIPO_DE_ALTERACAO_NO_ARQUIVO_AFETADO, event.kind(), event.context());
             }
             key.reset();
         }
