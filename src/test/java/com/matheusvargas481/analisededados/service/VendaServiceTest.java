@@ -75,9 +75,21 @@ public class VendaServiceTest {
         return new Venda($ -> {
             $.setId(10L);
             $.setItensDeVendas(Arrays.asList(
-                    new ItemDeVenda(1L, 10, 100D),
-                    new ItemDeVenda(2L, 30, 2.50),
-                    new ItemDeVenda(3L, 40, 3.10)));
+                    new ItemDeVenda(itemUm -> {
+                        itemUm.setId(1L);
+                        itemUm.setQuantidade(10);
+                        itemUm.setPreco(100D);
+                    }),
+                    new ItemDeVenda(itemDois -> {
+                        itemDois.setId(2L);
+                        itemDois.setQuantidade(30);
+                        itemDois.setPreco(2.50);
+                    }),
+                    new ItemDeVenda(itemtres -> {
+                        itemtres.setId(3L);
+                        itemtres.setQuantidade(40);
+                        itemtres.setPreco(3.10);
+                    })));
             $.setNome("Diego");
         });
 
@@ -95,9 +107,21 @@ public class VendaServiceTest {
         return new Venda($ -> {
             $.setId(10L);
             $.setItensDeVendas(Arrays.asList(
-                    new ItemDeVenda(1L, 10, 100D),
-                    new ItemDeVenda(2L, 30, 2.50),
-                    new ItemDeVenda(3L, 40, 3.10)));
+                    new ItemDeVenda(itemUm -> {
+                        itemUm.setId(1L);
+                        itemUm.setQuantidade(10);
+                        itemUm.setPreco(100D);
+                    }),
+                    new ItemDeVenda(itemDois -> {
+                        itemDois.setId(2L);
+                        itemDois.setQuantidade(30);
+                        itemDois.setPreco(2.50);
+                    }),
+                    new ItemDeVenda(itemtres -> {
+                        itemtres.setId(3L);
+                        itemtres.setQuantidade(40);
+                        itemtres.setPreco(3.10);
+                    })));
             $.setNome("Assunção");
         });
 

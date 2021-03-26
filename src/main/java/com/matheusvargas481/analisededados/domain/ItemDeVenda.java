@@ -1,5 +1,7 @@
 package com.matheusvargas481.analisededados.domain;
 
+import java.util.function.Consumer;
+
 public class ItemDeVenda {
     private Long id;
     private int quantidade;
@@ -8,10 +10,8 @@ public class ItemDeVenda {
     public ItemDeVenda() {
     }
 
-    public ItemDeVenda(Long id, int quantidade, Double preco) {
-        this.id = id;
-        this.quantidade = quantidade;
-        this.preco = preco;
+    public ItemDeVenda(Consumer<ItemDeVenda> itemDeVenda) {
+        itemDeVenda.accept(this);
     }
 
     public Long getId() {
