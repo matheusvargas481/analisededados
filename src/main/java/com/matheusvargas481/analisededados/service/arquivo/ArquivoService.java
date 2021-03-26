@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.NoSuchElementException;
 import java.util.stream.Stream;
@@ -26,15 +27,16 @@ public class ArquivoService {
 
     public void lerLinhasDeTodosArquivosDoDiretorioObservado() {
         DadoProcessado dadoProcessado = new DadoProcessado();
-        try (Stream<String> lines =
-                     (Files.newBufferedReader(Paths.get(GerenciaDiretorioConfig.DIRETORIO_DE_ENTRADA))
-                             .lines())) {
-            lines.forEach(linha -> processaArquivoService.processarArquivos(linha, dadoProcessado));
-            lines.close();
-            escreverNoArquivo(dadoProcessado);
-        } catch (IOException ioException) {
-            throw new ErroAoLerArquivoException(ioException.getMessage());
+        try {
+            for (Path path : Files.newDirectoryStream(Paths.get(GerenciaDiretorioConfig.DIRETORIO_DE_ENTRADA))) {
+                try (Stream<String> linhas = Files.lines(Paths.get(path.normalize().toString()))) {
+                    linhas.forEach(linha -> processaArquivoService.processarArquivos(linha, dadoProcessado));
+                }
+            }
+        } catch (IOException e) {
+            throw new ErroAoLerArquivoException(e.getMessage());
         }
+        escreverNoArquivo(dadoProcessado);
     }
 
     private void escreverNoArquivo(DadoProcessado dadoProcessado) {

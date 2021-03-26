@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Service(value = "003")
 public class VendaService extends Separador implements MontaObjetoStrategy {
     private static Logger LOGGER = LoggerFactory.getLogger(VendaService.class);
 
@@ -24,23 +24,26 @@ public class VendaService extends Separador implements MontaObjetoStrategy {
     private static final String MENSAGEM_DE_ERRO_NO_PARSE_DO_ITEM_DE_VENDA = "Não foi possível efetuar o parse do item de venda: {} por alguma inconsistência no layout.  Motivo: {}";
 
     @Override
-    public void montarObjeto(String linhaComVenda, DadoProcessado dadoProcessado) {
-        if (!linhaComVenda.isEmpty()) {
-            String[] linhasDeVendasSemSeparador = separarLinhaParaMontarObjeto(linhaComVenda);
+    public void montarObjeto(String linhaDeVenda, DadoProcessado dadoProcessado) {
+        if (!linhaDeVenda.isEmpty()) {
+            if (isLinhaDeVendaValido(linhaDeVenda)) {
+                String[] linhasDeVendasSemSeparador = separarLinhaParaMontarObjeto(linhaDeVenda);
 
-            try {
-                if (linhasDeVendasSemSeparador.length == 4) {
-                    Venda venda = new Venda();
-                    venda.setId(Long.parseLong(linhasDeVendasSemSeparador[1]));
-                    venda.setItensDeVendas(montaListaDeItemDeVenda(linhasDeVendasSemSeparador[2]));
-                    venda.setNome(linhasDeVendasSemSeparador[3]);
-                    dadoProcessado.addVenda(venda);
-                } else
-                    throw new LayoutDeVendaDiferenteDoEsperadoException();
-            } catch (LayoutDeVendaDiferenteDoEsperadoException e) {
-                LOGGER.error(MENSAGEM_DE_ERRO_NO_LAYOUT_DA_VENDA, linhaComVenda, e.getCause());
+                try {
+                    if (linhasDeVendasSemSeparador.length == 4) {
+                        Venda venda = new Venda();
+                        venda.setId(Long.parseLong(linhasDeVendasSemSeparador[1]));
+                        venda.setItensDeVendas(montaListaDeItemDeVenda(linhasDeVendasSemSeparador[2]));
+                        venda.setNome(linhasDeVendasSemSeparador[3]);
+                        dadoProcessado.addVenda(venda);
+                    } else
+                        throw new LayoutDeVendaDiferenteDoEsperadoException();
+                } catch (LayoutDeVendaDiferenteDoEsperadoException e) {
+                    LOGGER.error(MENSAGEM_DE_ERRO_NO_LAYOUT_DA_VENDA, linhaDeVenda, e.getCause());
+                }
             }
         }
+
     }
 
     private List<ItemDeVenda> montaListaDeItemDeVenda(String itensDaVenda) {
@@ -73,5 +76,8 @@ public class VendaService extends Separador implements MontaObjetoStrategy {
         return itensDeVendas;
     }
 
+    private boolean isLinhaDeVendaValido(String linhaComCliente) {
+        return linhaComCliente.startsWith(Venda.COMECA_COM_003);
+    }
 
 }

@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service(value = "001")
 public class VendedorService extends Separador implements MontaObjetoStrategy {
     private static final String REGEX_RETIRA_LETRAS_CAMPO_SALARIO = "[^\\d\\.]+";
     private static Logger LOGGER = LoggerFactory.getLogger(VendedorService.class);
@@ -17,31 +17,36 @@ public class VendedorService extends Separador implements MontaObjetoStrategy {
     private static final String MENSAGEM_DE_ERRO_NO_PARSE_DO_SALARIO_DO_VENDEDOR = "Não foi possível efetuar o parse do salário do vendedor: {} por alguma inconsistência no layout.  Motivo: {}";
 
     @Override
-    public void montarObjeto(String linhaComVendedor, DadoProcessado dadoProcessado) {
-        if (!linhaComVendedor.isEmpty()) {
-            String[] linhasDeVendedorSemSeparador = separarLinhaParaMontarObjeto(linhaComVendedor);
+    public void montarObjeto(String linhaDeVendedor, DadoProcessado dadoProcessado) {
+        if (!linhaDeVendedor.isEmpty()) {
+            if (isLinhaDeVendedor(linhaDeVendedor)) {
+                String[] linhasDeVendedorSemSeparador = separarLinhaParaMontarObjeto(linhaDeVendedor);
 
-            try {
-                if (linhasDeVendedorSemSeparador.length == 4) {
-                    Vendedor vendedor = new Vendedor();
-                    vendedor.setCpf(linhasDeVendedorSemSeparador[1]);
-                    vendedor.setNome(linhasDeVendedorSemSeparador[2]);
-                    vendedor.setSalario(Double.parseDouble(removerLetrasDoSalario(linhasDeVendedorSemSeparador[3])));
-                    dadoProcessado.addVendedor(vendedor);
-                } else
-                    throw new LayoutDeVendedorDiferenteDoEsperadoException();
+                try {
+                    if (linhasDeVendedorSemSeparador.length == 4) {
+                        Vendedor vendedor = new Vendedor();
+                        vendedor.setCpf(linhasDeVendedorSemSeparador[1]);
+                        vendedor.setNome(linhasDeVendedorSemSeparador[2]);
+                        vendedor.setSalario(Double.parseDouble(removerLetrasDoSalario(linhasDeVendedorSemSeparador[3])));
+                        dadoProcessado.addVendedor(vendedor);
+                    } else
+                        throw new LayoutDeVendedorDiferenteDoEsperadoException();
 
-            } catch (LayoutDeVendedorDiferenteDoEsperadoException e) {
-                LOGGER.error(MENSAGEM_DE_ERRO_NO_LAYOUT_DO_VENDEDOR, linhaComVendedor, e.getCause());
-            } catch (NumberFormatException n) {
-                LOGGER.error(MENSAGEM_DE_ERRO_NO_PARSE_DO_SALARIO_DO_VENDEDOR, linhaComVendedor, n.getCause());
+                } catch (LayoutDeVendedorDiferenteDoEsperadoException e) {
+                    LOGGER.error(MENSAGEM_DE_ERRO_NO_LAYOUT_DO_VENDEDOR, linhaDeVendedor, e.getCause());
+                } catch (NumberFormatException n) {
+                    LOGGER.error(MENSAGEM_DE_ERRO_NO_PARSE_DO_SALARIO_DO_VENDEDOR, linhaDeVendedor, n.getCause());
+                }
             }
         }
     }
 
-    public String removerLetrasDoSalario(String salario) {
+    private String removerLetrasDoSalario(String salario) {
         return salario.replaceAll(REGEX_RETIRA_LETRAS_CAMPO_SALARIO, "");
     }
 
+    private boolean isLinhaDeVendedor(String linhaDeVendedor) {
+        return linhaDeVendedor.startsWith(Vendedor.COMECA_COM_001);
+    }
 
 }

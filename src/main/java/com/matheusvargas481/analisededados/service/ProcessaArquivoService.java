@@ -5,24 +5,21 @@ import com.matheusvargas481.analisededados.domain.Cliente;
 import com.matheusvargas481.analisededados.domain.DadoProcessado;
 import com.matheusvargas481.analisededados.domain.Venda;
 import com.matheusvargas481.analisededados.domain.Vendedor;
-import com.matheusvargas481.analisededados.strategy.ProcessaDadoStrategy;
+import com.matheusvargas481.analisededados.strategy.MontaObjetoStrategy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 public class ProcessaArquivoService {
-    ProcessaDadoStrategy processaDadoStrategy = new ProcessaDadoStrategy();
+    @Autowired
+    private Map<String, MontaObjetoStrategy> strategyMap;
 
     public void processarArquivos(String linhaArquivo, DadoProcessado dadoProcessado) {
-        if (linhaArquivo.startsWith(Vendedor.COMECA_COM_001)) {
-            processaDadoStrategy.setMontaObjetoStrategy(new VendedorService());
-            processaDadoStrategy.executarStrategy(linhaArquivo, dadoProcessado);
-        } else if (linhaArquivo.startsWith(Cliente.COMECA_COM_002)) {
-            processaDadoStrategy.setMontaObjetoStrategy(new ClienteService());
-            processaDadoStrategy.executarStrategy(linhaArquivo, dadoProcessado);
-        } else if (linhaArquivo.startsWith(Venda.COMECA_COM_003)) {
-            processaDadoStrategy.setMontaObjetoStrategy(new VendaService());
-            processaDadoStrategy.executarStrategy(linhaArquivo, dadoProcessado);
-        }
+        strategyMap.get(Vendedor.COMECA_COM_001).montarObjeto(linhaArquivo, dadoProcessado);
+        strategyMap.get(Cliente.COMECA_COM_002).montarObjeto(linhaArquivo, dadoProcessado);
+        strategyMap.get(Venda.COMECA_COM_003).montarObjeto(linhaArquivo, dadoProcessado);
     }
 
 }
